@@ -1,0 +1,48 @@
+version: "3.3"
+
+services:
+  frontend:
+    ports:
+      - 3000:3000
+    build:
+      context: Frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+      - /app/.next
+  backend:
+    build:
+      context: Backend
+      target: builder
+    container_name: backend
+    environment:
+      PORT: 8000
+    ports:
+      - '3001:8000'
+    restart: "no"
+
+  mockapi:
+    build:
+      context: MockAPI
+      target: builder
+    container_name: mockapi
+    environment:
+      PORT: 8000
+    ports:
+      - '3002:8000'
+    restart: "no"
+  mysql:
+    build:
+      context: Database
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: passwordsicura
+      MYSQL_DATABASE: derweze
+      PORT: 3306
+    ports:
+      - "3003:3306"
+    volumes:
+      - ./Database:/appdb
+  
+
