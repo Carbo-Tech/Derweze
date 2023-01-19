@@ -2,6 +2,8 @@ version: "3.3"
 
 services:
   frontend:
+    container_name: derweze_frontend
+    hostname: derweze_frontend
     ports:
       - 3000:3000
     build:
@@ -11,28 +13,37 @@ services:
       - ./Frontend:/app
       - /app/node_modules
       - /app/.next
+
   backend:
     build:
       context: Backend
       target: builder
-    container_name: backend
+    container_name: derweze_backend
+    hostname: derweze_backend
     environment:
       PORT: 8000
     ports:
       - '3001:8000'
     restart: "no"
+    volumes:
+      - ./Backend/app:/app
 
   mockapi:
     build:
       context: MockAPI
       target: builder
-    container_name: mockapi
+    container_name: derweze_mockapi
+    hostname: derweze_mockapi
     environment:
       PORT: 8000
     ports:
       - '3002:8000'
     restart: "no"
+    volumes:
+      - ./MockAPI/app:/app
   mysql:
+    hostname: derweze_mysql
+    container_name: derweze_mysql
     build:
       context: Database
       dockerfile: Dockerfile
