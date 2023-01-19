@@ -13,6 +13,9 @@ services:
       - ./Frontend:/app
       - /app/node_modules
       - /app/.next
+    networks:
+      - external
+      - web
 
   backend:
     build:
@@ -21,12 +24,13 @@ services:
     container_name: derweze_backend
     hostname: derweze_backend
     environment:
-      PORT: 8000
-    ports:
-      - '3001:8000'
+      PORT: 443
     restart: "no"
     volumes:
       - ./Backend/app:/app
+    networks:
+      - external
+      - internal
 
   mockapi:
     build:
@@ -35,12 +39,12 @@ services:
     container_name: derweze_mockapi
     hostname: derweze_mockapi
     environment:
-      PORT: 8000
-    ports:
-      - '3002:8000'
+      PORT: 443
     restart: "no"
     volumes:
       - ./MockAPI/app:/app
+    networks:
+      - web
   mysql:
     hostname: derweze_mysql
     container_name: derweze_mysql
@@ -51,9 +55,18 @@ services:
       MYSQL_ROOT_PASSWORD: passwordsicura
       MYSQL_DATABASE: derweze
       PORT: 3306
-    ports:
-      - "3003:3306"
     volumes:
       - ./Database:/appdb
+    networks:
+      - internal
+
+networks:
+  web:
+    driver: bridge
+  internal:
+    driver: bridge
+    internal: true
+  external:
+    driver: bridge
   
 
