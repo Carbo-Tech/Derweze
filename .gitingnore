@@ -1,2 +1,4 @@
 .Frontend/.next
 .Frontend/node_modules
+.MockAPI/app/__pycache__/
+.Backend/app/__pycache__/
