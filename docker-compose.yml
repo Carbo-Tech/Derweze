@@ -2,6 +2,7 @@ version: "3.3"
 
 services:
   frontend:
+    tty: true
     container_name: derweze_frontend
     hostname: derweze_frontend
     ports:
@@ -9,6 +10,8 @@ services:
     build:
       context: Frontend
       dockerfile: Dockerfile
+    restart: always
+
     volumes:
       - ./Frontend:/app
       - /app/node_modules
