@@ -11,7 +11,7 @@
     "ssl:setup": "node scripts/create-ssl-certs.js"
   },
   "dependencies": {
-    "@next/font": "13.0.7",
+    "@next/font": "13.1.6",
     "@nextui-org/react": "^1.0.0-beta.11",
     "@svgr/webpack": "^6.5.1",
     "@types/node": "18.11.17",
