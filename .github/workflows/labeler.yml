@@ -1,6 +1,12 @@
 name: PR Labeler
 on: [ pull_request_target ]
 
+permissions:
+  # All other permissions are set to none
+  checks: write
+  contents: read
+  pull-requests: write
+  
 jobs:
   triage:
     permissions:
