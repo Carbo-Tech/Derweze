@@ -1,1 +1,13 @@
 
+documentation:
+  - *.md
+workflows:
+  - .github/workflows/*
+Database:
+  - Derweze/Database/*
+Backend:
+  - Derweze/Backend/*
+Frontend:
+  - Derweze/Frontend/*
+MockAPI:
+  - Derweze/MockAPI/*
