@@ -28,7 +28,7 @@
     "react-transition-group": "^4.4.5",
     "require": "^0.4.4",
     "sass": "^1.57.1",
-    "swr": "^2.0.0",
+    "swr": "^2.0.3",
     "typescript": "4.9.4"
   },
   "devDependencies": {
