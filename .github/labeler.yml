@@ -1,6 +1,6 @@
 
 documentation:
-  - *.md
+  - '**/*.md'
 workflows:
   - .github/workflows/*
 Database:
