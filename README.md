@@ -1,3 +1,4 @@
+
 <h1 align="center">Welcome to Derweze 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-development-blue.svg?cacheSeconds=2592000" />
@@ -5,23 +6,36 @@
 
 > A gas and electricity contracts manager, built for terranovasoftware.eu
 
-### ✨ [Demo](localhost:3000)
+### ✨ [Local Demo at localhost:3000](localhost:3000)
 
 ## Install
 
+you need docker to be installed, see https://docs.docker.com/engine/install/.
+you also need docker-compose, can be installed with:
 ```sh
-docker-compose up
-```
+ pip install docker-compose
+ ```
 
 ## Usage
 
+in the project folder
 ```sh
-you need docker to be installed https://docs.docker.com/engine/install/, then run pip install docker-compose to install docker-compose, in the folder run docker-compose up to execute the project
+docker-compose up --build
 ```
+ to execute the project, and 
+ ```sh
+docker-compose down
+```
+to stop the containers
 
-## Author
+## Authors
 
-👤 **Secchi Pietro Giampaolo, De Martini Di Valle Aperta Francesco, Zaki Pedio, Colombo Riccardo, Brunelli Tommaso **
+👤 
+Secchi Pietro Giampaolo 
+De Martini Di Valle Aperta Francesco 
+Zaki Pedio
+Colombo Riccardo, 
+Brunelli Tommaso 
 
 
 ## Show your support
