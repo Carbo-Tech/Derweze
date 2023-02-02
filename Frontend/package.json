@@ -1,10 +1,10 @@
 {
-  "name": "tutorial",
+  "name": "derweze",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "devssl": "NODE_EXTRA_CA_CERTS=\"$(cat ./certs/.capath)\" node scripts/create-local-server.mjs",
-    "dev": "next dev",
+    "dev": "next dev -p 2999",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -18,20 +18,23 @@
     "chart.js": "^4.1.1",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
-    "faker": "^6.6.6",
+    "faker": "^5.5.3",
     "next": "13.1.6",
+    "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.1.0",
     "react-dom": "18.2.0",
     "react-transition-group": "^4.4.5",
-    "require": "^2.4.20",
-    "sass": "^1.58.0",
+    "require": "^0.4.4",
+    "sass": "^1.57.1",
     "swr": "^2.0.3",
     "typescript": "4.9.5"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
     "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10"
+    "@types/react-dom": "^18.0.10",
+    "babel-plugin-styled-components": "^2.0.7",
+    "styled-components": "^5.3.6"
   }
 }

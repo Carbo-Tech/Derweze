@@ -4,7 +4,7 @@ import { Navbar, Button, Link, Text, Card, Radio } from "@nextui-org/react";
 const variants = ["static", "floating", "sticky"];
 export default function Footer(){
     return(<>
-        <Navbar isBordered maxWidth="fluid" variant={variants[0]}>
+        <Navbar isBordered maxWidth="fluid" variant="static">
         <Navbar.Brand>
 
           <Text b color="inherit" hideIn="xs">
