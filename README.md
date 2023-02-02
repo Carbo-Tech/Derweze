@@ -32,7 +32,7 @@ to stop the containers
 
 Secchi Pietro Giampaolo,  
 de' Martini di Valle Aperta Francesco,  
-Zaki Pedio, 
+Zaki Pedio,   
 Colombo Riccardo,  
 Brunelli Tommaso  
 
