@@ -28,9 +28,8 @@ docker-compose down
 ```
 to stop the containers
 
-## Authors
+## Authors 👤
 
-👤 
 Secchi Pietro Giampaolo,  
 de' Martini di Valle Aperta Francesco,  
 Zaki Pedio, 
