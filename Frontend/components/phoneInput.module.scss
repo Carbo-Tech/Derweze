@@ -1,0 +1,20 @@
+
+
+.react-tel-input {
+    .form-control {
+        border-radius: 15px;
+        width: 300px;
+        height: 3em;
+        border-width: 2px;
+        outline: none;
+        padding: 18.5px 14px 18.5px 58px;
+        transition: box-shadow ease .25s, border-color ease .25s;
+        color: #000;
+
+        &:hover {
+            border-color: #0141ff;
+        }
+
+
+    }
+}

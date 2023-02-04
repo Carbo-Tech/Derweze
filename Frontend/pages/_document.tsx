@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head  >
       <style>
-          @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+          @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
         </style>
       </Head>
       <body>

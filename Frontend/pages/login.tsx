@@ -15,7 +15,7 @@ import Footer from '../components/Footer';
 export default function Login() {
     return (
         <>
-            <Container strategy="beforeInteractive"
+            <Container
 
                 display="flex"
                 alignItems="center"
