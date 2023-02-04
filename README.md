@@ -28,14 +28,13 @@ docker-compose down
 ```
 to stop the containers
 
-## Authors
+## Authors 👤
 
-👤 
-Secchi Pietro Giampaolo 
-De Martini Di Valle Aperta Francesco 
-Zaki Pedio
-Colombo Riccardo, 
-Brunelli Tommaso 
+Secchi Pietro Giampaolo,  
+de' Martini di Valle Aperta Francesco,  
+Zaki Pedio,   
+Colombo Riccardo,  
+Brunelli Tommaso  
 
 
 ## Show your support
