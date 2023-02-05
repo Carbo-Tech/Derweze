@@ -13,6 +13,7 @@ services:
     restart: always
 
     volumes:
+      - ./yarn_cache:/yarn
       - ./Frontend:/app
       - /app/node_modules
       - /app/.next

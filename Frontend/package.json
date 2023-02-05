@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "ssl:setup": "node scripts/create-ssl-certs.js"
+    "predevssl": "node scripts/create-ssl-certs.js"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -24,6 +24,7 @@
     "all": "^0.0.0",
     "chart.js": "^4.1.1",
     "dayjs": "^1.11.7",
+    "devcert": "^1.2.2",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
     "faker": "^5.5.3",
@@ -44,6 +45,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "babel-plugin-styled-components": "^2.0.7",
+    "devcert": "^1.2.2",
     "styled-components": "^5.3.6"
   }
 }
