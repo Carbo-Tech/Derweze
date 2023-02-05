@@ -4,6 +4,8 @@
   <img alt="Version" src="https://img.shields.io/badge/version-development-blue.svg?cacheSeconds=2592000" />
 </p>
 
+[![CodeQL](https://github.com/Carbo-Tech/Derweze/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/Carbo-Tech/Derweze/actions/workflows/github-code-scanning/codeql)
+
 > A gas and electricity contracts manager, built for terranovasoftware.eu
 
 ### ✨ [Local Demo at localhost:3000](localhost:3000)
