@@ -1,6 +1,6 @@
 ---
 name: "🐛 Bug Report"
-about: Create a report to help us improve
+about: Create a report to help us improve.
 title: "[BUG]"
 labels: bug
 assignees: deMartiniFrancesco, 4BI-SecchiPietro-2021-2022, PedioZaki-3BI-2020-2021
