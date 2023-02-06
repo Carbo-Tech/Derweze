@@ -52,6 +52,8 @@ services:
   mysql:
     hostname: derweze_mysql
     container_name: derweze_mysql
+    ports:
+      - 3306:3306
     build:
       context: Database
       dockerfile: Dockerfile
@@ -62,6 +64,7 @@ services:
     volumes:
       - ./Database:/appdb
     networks:
+      - web
       - internal
 
 networks:
