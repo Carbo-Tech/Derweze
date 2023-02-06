@@ -1,0 +1,15 @@
+﻿IDRigaContratto;IDSede;DataRichiestaServizio;DataInizioValidita;DataFineValidita;DescrizioneOfferta;Utility;StatoContratto;TipoPagamento;PotenzaImp;PotDisp;EnergiaAnno;GasAnno;UsoCotturaCibi;ProduzioneAcquaCaldaSanitaria;RiscaldamentoIndividuale;UsoCommerciale
+1;1;2010-12-21 00:00:00.000;2011-02-01 00:00:00.000;2050-12-31 23:59:59.000;Easy Energy;EE;Attivo;Bonifico;3.30;3.00;5408;;;;;
+2;2;2012-09-24 00:00:00.000;2012-10-01 00:00:00.000;2050-12-31 23:59:59.000;Easy Energy;EE;Attivo;Carta di credito;3.30;3.00;4862;;;;;
+3;3;2012-09-24 00:00:00.000;2015-04-01 00:00:00.000;2050-12-31 23:59:59.000;Easy Energy;EE/GAS;Attivo;Bonifico;3.30;3.00;4596;1073;1;1;1;0
+4;4;2010-12-14 00:00:00.000;2011-02-01 00:00:00.000;2050-12-31 23:59:59.000;Family;GAS;Attivo;Bonifico;;;;1045;1;1;1;0
+5;5;2012-01-31 00:00:00.000;2012-02-01 00:00:00.000;2050-12-31 23:59:59.000;Family;GAS;Attivo;Bonifico;;;;879;1;1;1;0
+6;6;2022-10-23 00:00:00.000;2022-12-01 00:00:00.000;2050-12-31 23:59:59.000;Family;EE;In lavorazione;Bollettino;3.30;3.00;2085;;;;;
+7;7;2012-08-28 00:00:00.000;2012-09-01 00:00:00.000;2050-12-31 23:59:59.000;Family;EE;Attivo;Bollettino;3.30;3.00;6023;;;;;
+8;8;2012-08-28 00:00:00.000;2015-04-01 00:00:00.000;2050-12-31 00:00:00.000;Full Power;EE;Attivo;Bonifico;16.50;15.00;45581;;;;;
+9;9;2015-05-01 00:00:00.000;2015-05-01 00:00:00.000;2015-05-31 23:59:59.000;Full Power;EE;Attivo;Bonifico;16.50;15.00;62484;;;;;
+10;10;2015-05-01 00:00:00.000;2015-05-01 00:00:00.000;2015-05-31 23:59:59.000;Full Power;EE;Attivo;Bonifico;11.00;10.00;50024;;;;;
+11;11;2010-12-21 00:00:00.000;2011-02-01 00:00:00.000;2050-12-31 23:59:59.000;Super Power;EE;Attivo;Bonifico;60.00;60.00;59235;;;;;
+12;12;2012-08-31 00:00:00.000;2012-09-01 00:00:00.000;2050-12-31 23:59:59.000;Super Power;EE;Attivo;Bonifico;60.00;60.00;74024;;;;;
+13;13;2012-08-31 00:00:00.000;2015-04-01 00:00:00.000;2050-12-31 00:00:00.000;Super Power;GAS;Attivo;Bonifico;;;;8460;1;1;1;1
+14;14;2010-12-10 00:00:00.000;2011-02-01 00:00:00.000;2050-12-31 23:59:59.000;Super Power;GAS;Attivo;Bonifico;;;;6126;1;1;1;1
