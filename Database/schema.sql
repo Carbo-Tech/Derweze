@@ -8,14 +8,14 @@ CREATE TABLE `user` (
     PRIMARY KEY (`id`)
 );
 CREATE TABLE `registry` (
-    `id`                        INT AUTO_INCREMENT      NOT NULL,
-    `name`                      VARCHAR(255)            NOT NULL,
-    `surname`                   VARCHAR(255)            NOT NULL,
+    `id`                        INT AUTO_INCREMENT              ,
+    `name`                      VARCHAR(255)            DEFAULT NULL,
+    `surname`                   VARCHAR(255)            DEFAULT NULL,
     `business_name`             VARCHAR(255)            NOT NULL,
-    `vat_number`                CHAR(10)                NOT NULL,
-    `telephone_number`          VARCHAR(20)             NOT NULL,
-    `social_security_number`    CHAR(16)                NOT NULL,
-    `is_admin`                  BOOLEAN                 NOT NULL,
+    `vat_number`                CHAR(10)                DEFAULT NULL,
+    `telephone_number`          VARCHAR(20)             DEFAULT NULL,
+    `social_security_number`    CHAR(16)                DEFAULT NULL,
+    `is_admin`                  BOOLEAN                 DEFAULT FALSE,
     `Indirizzo`                 VARCHAR(255)            NOT NULL,
     `Civico`                    INT                     NOT NULL,
     `CAP`                       CHAR(5)                 NOT NULL,
