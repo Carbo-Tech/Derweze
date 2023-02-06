@@ -8,7 +8,7 @@ CREATE TABLE `user` (
     PRIMARY KEY (`id`)
 );
 CREATE TABLE `registry` (
-    `id`                        INT AUTO_INCREMENT              ,
+    `id`                        INT AUTO_INCREMENT,
     `name`                      VARCHAR(255)            DEFAULT NULL,
     `surname`                   VARCHAR(255)            DEFAULT NULL,
     `business_name`             VARCHAR(255)            NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE `registry` (
 CREATE TABLE `permissions` (
     `idRegistry`    INT         NOT NULL,
     `idContract`    INT         NOT NULL,
-    -- view/modify
+    -- view/modify(e/v)
     `type`          char(1)     NOT NULL
 );
 CREATE TABLE `domicile` (

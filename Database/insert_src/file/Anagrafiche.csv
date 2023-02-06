@@ -1,4 +1,4 @@
-﻿IDAnagrafica;surname;name;business_name;vat_number;social_security_number;Indirizzo;Civico;CAP;Localita;Provincia;Nazione;telephone_number;Email
+﻿IDAnagrafica;surname;name;business_name;vat_number;social_security_number;Indirizzo;Civico;CAP;Localita;Provincia;Nazione;telephone_number;email
 1;NADINI;ROBERTA;NADINI ROBERTA;;NDNRRT68L29H193E;VIA ETNA;12;16134;GENOVA;GE;IT;;rnadini@google.com
 2;CARUFFI;CARLO;CARUFFI CARLO;;CRFCRL64R25D969X;VIA ROMA;78;16132;GENOVA;GE;IT;3471234309;ccaruffi@icloud.com
 3;CERVISIO;GAETANO;CERVISIO GAETANO;;CRVGTN61L14F939Y;VIA CATANIA;9;45011;ADRIA;RO;IT;3426907124;gaetano.cervisio@gmail.com
