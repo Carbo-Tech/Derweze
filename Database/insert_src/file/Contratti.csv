@@ -1,4 +1,4 @@
-﻿IDRigaContratto;IDSede;DataRichiestaServizio;DataInizioValidita;DataFineValidita;DescrizioneOfferta;Utility;StatoContratto;TipoPagamento;PotenzaImp;PotDisp;EnergiaAnno;GasAnno;UsoCotturaCibi;ProduzioneAcquaCaldaSanitaria;RiscaldamentoIndividuale;UsoCommerciale
+﻿IDRigaContratto;idSede;service_request_date;validity_start_date;validity_end_date;offert_description;utility;contract_status;payment_type;taxable_power;available_power;annual_energy;annual_gas;use_cooking_foods;production_hot_sanitary_water;individual_heating;commercial_use
 1;1;2010-12-21 00:00:00.000;2011-02-01 00:00:00.000;2050-12-31 23:59:59.000;Easy Energy;EE;Attivo;Bonifico;3.30;3.00;5408;;;;;
 2;2;2012-09-24 00:00:00.000;2012-10-01 00:00:00.000;2050-12-31 23:59:59.000;Easy Energy;EE;Attivo;Carta di credito;3.30;3.00;4862;;;;;
 3;3;2012-09-24 00:00:00.000;2015-04-01 00:00:00.000;2050-12-31 23:59:59.000;Easy Energy;EE/GAS;Attivo;Bonifico;3.30;3.00;4596;1073;1;1;1;0
