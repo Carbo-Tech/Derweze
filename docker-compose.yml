@@ -52,16 +52,24 @@ services:
   mysql:
     hostname: derweze_mysql
     container_name: derweze_mysql
+    ports:
+
+      - 3306:3306
+
     build:
       context: Database
       dockerfile: Dockerfile
+    
     environment:
       MYSQL_ROOT_PASSWORD: passwordsicura
       MYSQL_DATABASE: derweze
+      MYSQL_USER: root1
+      MYSQL_PASSWORD: root1
       PORT: 3306
     volumes:
       - ./Database:/appdb
     networks:
+      - web
       - internal
 
 networks:
