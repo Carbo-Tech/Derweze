@@ -12,7 +12,25 @@ import {
     Container,
 } from '@nextui-org/react';
 import Footer from '../components/Footer';
+import { useState } from 'react';
 export default function Login() {
+    function Login() {
+        fetch("/api/login", {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(formData) // body data type must match "Content-Type" header
+
+        })
+            .then(response => response.json())
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+
+    };
+    function clickHandler(e:any) {
+        Login()
+        console.log(formData);
+    }
+    const [formData, setFormData] = useState({email:"",pww:""})
     return (
         <>
             <Container
@@ -40,6 +58,8 @@ export default function Login() {
                         Derweze Login
                     </Text>
                     <Input
+                        value={formData["email"]}
+                        onChange={(event) => { setFormData({ ...formData, email: event.target.value }); console.log(formData) }}
                         clearable
                         bordered
                         fullWidth
@@ -49,6 +69,8 @@ export default function Login() {
                     />
                     <Spacer y={1} />
                     <Input
+                        value={formData["pww"]}
+                        onChange={(event) => { setFormData({ ...formData, pww: event.target.value }); console.log(formData) }}
                         clearable
                         bordered
                         fullWidth
@@ -65,7 +87,14 @@ export default function Login() {
                         <Text size={14}>Forgot password?</Text>
                     </Row>
                     <Spacer y={1} />
-                    <Button>Sign in</Button>
+                    <Button
+                        css={{
+                            width: "100%",
+                        }}
+                        onClick={(e) => { clickHandler(e); }}
+                    >
+                        Sign in
+                    </Button>
                     <Spacer y={1} />
                     <Text size={14}>No account? <Link href="signup">Create one</Link></Text>
 

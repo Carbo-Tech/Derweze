@@ -7,6 +7,7 @@ services:
     hostname: derweze_frontend
     ports:
       - 3000:3000
+      - 2999:2999
     build:
       context: Frontend
       dockerfile: Dockerfile
@@ -25,11 +26,15 @@ services:
     build:
       context: Backend
       target: builder
+
     ports:
       - 3307:443
     container_name: derweze_backend
     hostname: derweze_backend
     environment:
+      DATABASE: "derweze"
+      USER_DB: "root"
+      PASSWORD_DB: "passwordsicura"
       PORT: 443
     restart: "no"
     volumes:
@@ -72,7 +77,6 @@ services:
     volumes:
       - ./Database:/appdb
     networks:
-      - web
       - web
       - internal
 

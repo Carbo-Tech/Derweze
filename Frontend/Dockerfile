@@ -31,4 +31,4 @@ EXPOSE 3000
 # Run yarn dev, as we would via the command line 
 
 
-CMD ["yarn", "devssl"]
+CMD ["yarn", "dev"]
