@@ -27,7 +27,7 @@
     "devcert": "^1.2.2",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
-    "faker": "^5.5.3",
+    "faker": "^6.6.6",
     "next": "13.1.6",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
