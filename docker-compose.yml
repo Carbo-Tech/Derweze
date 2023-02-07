@@ -25,6 +25,8 @@ services:
     build:
       context: Backend
       target: builder
+    ports:
+      - 3307:443
     container_name: derweze_backend
     hostname: derweze_backend
     environment:
@@ -33,6 +35,7 @@ services:
     volumes:
       - ./Backend/app:/app
     networks:
+      - web
       - external
       - internal
 

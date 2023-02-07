@@ -2,6 +2,7 @@
 
 ## Login
 
+`/login/`
 
 | **Input** | **Output** |
 | :-----: | :------: |
@@ -10,6 +11,8 @@
 
 
 ## Signup
+
+`/register/`
 
 | **Input** | **Output** |
 | :-----: | :------: |
