@@ -53,7 +53,7 @@ def execute_query(dict_list: list[dict], table: str):
             cursor.execute("select database()", "")
             record = cursor.fetchone()
             print("You're connected to database: ", record)
-
+            print("Performing queries...")
             # query
             for dictionary in dict_list:
 
@@ -61,7 +61,6 @@ def execute_query(dict_list: list[dict], table: str):
                 columns = ', '.join(dictionary.keys())
                 sql = "INSERT INTO %s ( %s ) VALUES ( %s )" % (
                     table, columns, placeholders)
-                print(sql)
                 cursor.execute(sql, list(dictionary.values()))
                 connection.commit()
 
