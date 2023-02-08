@@ -42,7 +42,7 @@ def login(user: User):
     query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s and password=SHA1(%s))"""
 
     
-    cursor.execute(query)
+    cursor.execute(query,(user.email,user.pww))
     return str(cursor.fetchall())
 
 

@@ -74,6 +74,8 @@ export default function Login() {
                         clearable
                         bordered
                         fullWidth
+                        type="password"
+
                         color="primary"
                         size="lg"
                         placeholder="Password"
