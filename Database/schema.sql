@@ -170,7 +170,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'rnadini@google.com','-6775682311015860226'),(2,'ccaruffi@icloud.com','-6775682311015860226'),(3,'gaetano.cervisio@gmail.com','-6775682311015860226'),(4,'cassaturoandrea@libero.it','-6775682311015860226'),(5,'beghini.alessandra@hotmail.it','-6775682311015860226'),(6,'gab_mos@yahoo.com','-6775682311015860226'),(7,'jollyfitnessclub@iol.it','-6775682311015860226'),(8,'carpediem@hotmail.it','-6775682311015860226'),(9,'info@panificioperotti.com','-6775682311015860226'),(10,'info@villadomenici.it','-6775682311015860226');
+INSERT INTO `user` VALUES (1,'rnadini@google.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(2,'ccaruffi@icloud.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(3,'gaetano.cervisio@gmail.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(4,'cassaturoandrea@libero.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(5,'beghini.alessandra@hotmail.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(6,'gab_mos@yahoo.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(7,'jollyfitnessclub@iol.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(8,'carpediem@hotmail.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(9,'info@panificioperotti.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(10,'info@villadomenici.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -183,4 +183,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-07 20:39:50
+-- Dump completed on 2023-02-10 11:39:48
