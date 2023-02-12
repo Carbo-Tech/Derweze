@@ -9,9 +9,8 @@ from mysql.connector.connection import MySQLConnection
 
 app = FastAPI()
 
-
 ALGORITHM = "HS256"
-SECRET_KEY = "secret" #TODO cambiare chiave
+SECRET_KEY = "secret"  # TODO cambiare chiave
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
@@ -56,7 +55,7 @@ def get_conn() -> MySQLConnection:
     return conn
 
 
-def add_user(conn: mysql.connector.connect, user: User) -> None:
+def add_user(conn: MySQLConnection, user: User) -> None:
     """
     Adds a user to the database
     """
@@ -64,10 +63,9 @@ def add_user(conn: mysql.connector.connect, user: User) -> None:
     insert_query = 'INSERT INTO users (email, password) VALUES (%s, SHA1(%s))'
     cursor.execute(insert_query, (user.email, user.password))
     conn.commit()
-    cursor.close()
 
 
-def add_registry(conn, registry: Registry) -> None:
+def add_registry(conn: MySQLConnection, registry: Registry) -> None:
     """
     Adds a registry to the database.
     """
@@ -106,10 +104,9 @@ def add_registry(conn, registry: Registry) -> None:
         registry.nation
     ))
     conn.commit()
-    cursor.close()
 
 
-def get_user_by_email(conn, email: str) -> User:
+def get_user_by_email(conn: MySQLConnection, email: str) -> User:
     """
     Returns the user with the given email address
     """
@@ -142,7 +139,7 @@ def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] 
     return encoded_jwt
 
 
-def get_current_user(conn, token: str = Depends(oauth2_scheme)) -> Tuple:
+def get_current_user(conn: MySQLConnection, token: str = Depends(oauth2_scheme)) -> Tuple:
     """
     Returns the current user based on the given token
     """
@@ -172,63 +169,61 @@ def get_current_user(conn, token: str = Depends(oauth2_scheme)) -> Tuple:
     return token_data
 
 
-if __name__ == "__main__":
+@app.post("/login")
+async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
+    """
+    Login endpoint for the user. 
+    It receives a User object containing email and password.
+    It returns a JSON response containing the access token and token type.
+    """
+    # Check if the user exists in the database
+    db_user = get_user_by_email(conn, user.email)
+    if not db_user:
+        # Raise an exception if the user is not found
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect email or password"
+        )
 
-    @app.post("/login")
-    async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
-        """
-        Login endpoint for the user. 
-        It receives a User object containing email and password.
-        It returns a JSON response containing the access token and token type.
-        """
-        # Check if the user exists in the database
-        db_user = get_user_by_email(conn, user.email)
-        if not db_user:
-            # Raise an exception if the user is not found
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Incorrect email or password"
-            )
+    # Hash the password using the SHA1 function
+    password = user.password.encode()
+    hashed_password = conn.execute("SELECT SHA1(%s)", password).fetchone()[0]
 
-        # Hash the password using the SHA1 function
-        password = user.password.encode()
-        hashed_password = conn.execute("SELECT SHA1(%s)", password).fetchone()[0]
+    # Compare the hashed password with the one in the database
+    if db_user.password != hashed_password:
+        # Raise an exception if the password is incorrect
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect email or password"
+        )
 
-        # Compare the hashed password with the one in the database
-        if db_user.password != hashed_password:
-            # Raise an exception if the password is incorrect
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Incorrect email or password"
-            )
+    # Create an access token for the user
+    access_token = create_access_token({"sub": user.email})
 
-        # Create an access token for the user
-        access_token = create_access_token({"sub": user.email})
+    # Close the database connection
+    conn.close()
 
-        # Close the database connection
-        conn.close()
-
-        # Return the access token and token type
-        return {"access_token": access_token, "token_type": "bearer"}
+    # Return the access token and token type
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
-    @app.post("/registry")
-    def api_registry(user: User, registry: Registry, conn: MySQLConnection = Depends(get_conn)):
-        # Check if email already exists in the database
-        db_user = get_user_by_email(conn, user.email)
-        if db_user:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email already exists"
-            )
+@app.post("/registry")
+def api_registry(user: User, registry: Registry, conn: MySQLConnection = Depends(get_conn)):
+    # Check if email already exists in the database
+    db_user = get_user_by_email(conn, user.email)
+    if db_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already exists"
+        )
 
-        # Insert registry data into database
-        add_registry(conn, registry)
-        # Insert user data into database
-        add_user(conn, user)
+    # Insert registry data into database
+    add_registry(conn, registry)
+    # Insert user data into database
+    add_user(conn, user)
 
-        # Commit changes and close connection
-        conn.commit()
-        conn.close()
+    # Commit changes and close connection
+    conn.commit()
+    conn.close()
 
-        return {"message": "User registered successfully"}
+    return {"message": "User registered successfully"}
