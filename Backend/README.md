@@ -5,16 +5,15 @@
 `/login/`
 
 | **Input** | **Output** |
-| :-----: | :------: |
-| email | registry |
-| password |
-
+| :-------: | :--------: |
+|   email   |  registry  |
+| password  |
 
 ## Signup
 
 `/register/`
 
 | **Input** | **Output** |
-| :-----: | :------: |
-| registry | boolean |
-| user |
+| :-------: | :--------: |
+| registry  |  boolean   |
+|   user    |
