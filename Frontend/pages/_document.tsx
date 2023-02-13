@@ -4,8 +4,9 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head  >
-      <style>
+        <style>
           @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+          zIndex: 0;
         </style>
       </Head>
       <body>

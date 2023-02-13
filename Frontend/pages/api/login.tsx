@@ -6,7 +6,7 @@ export default function handler(req:any, res:any) {
       case 'POST':
         console.log(req.body)
         console.log(req.body)
-        fetch("http://backend:443/login/", {
+        fetch("http://backend:443/getUserData/", {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
             body: req.body  

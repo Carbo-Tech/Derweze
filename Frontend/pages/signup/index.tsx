@@ -38,14 +38,17 @@ export default function Signup() {
       })
       console.log(formData)
   }
+  function Signup() {
+    fetch("/api/signup", {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(formData)
 
-
-  
-
-
-
-
-  console.log(step);
+    })
+        .then(response => response.json())
+        .then(res => {alert(res["message"]); console.log(res) })
+        .catch(err => console.log(err))
+};
 
   return (
     <>
@@ -63,7 +66,7 @@ export default function Signup() {
             height={80}
           />
 
-          <SignupSteps handleChange={handleChange} formData={formData} />
+          <SignupSteps handleChange={handleChange} signup={Signup} formData={formData} />
         </Card>
       </Container>
       <Footer />

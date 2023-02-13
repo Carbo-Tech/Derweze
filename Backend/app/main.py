@@ -40,6 +40,7 @@ class Registry(BaseModel):
     city: str
     province: str
     nation: str
+    
 
 
 def get_conn() -> MySQLConnection:
@@ -212,6 +213,21 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
 
     # Return the access token and token type
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.post("/getUserData")
+async def get_user_data(user: User, conn: MySQLConnection = Depends(get_conn)):
+
+    
+    cursor = conn.cursor()
+    query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s and password=SHA1(%s))"""
+
+    
+    cursor.execute(query,(user.email,user.password))
+    return str(cursor.fetchall())
+    
+    
+    
 
 
 @app.post("/signup")

@@ -5,6 +5,7 @@ import {
     Button,
     Text,
     Link,
+    Modal,
     Image,
     Input,
     Row,
@@ -14,23 +15,30 @@ import {
 import Footer from '../components/Footer';
 import { useState } from 'react';
 export default function Login() {
+    const [userData, setUserData] = useState([]);
     function Login() {
         fetch("/api/login", {
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify(formData) // body data type must match "Content-Type" header
+            body: JSON.stringify(formData)
 
         })
             .then(response => response.json())
-            .then(res => console.log(res))
+            .then(res => { setUserData(res["message"]["reso"].replace("(","").replace(")","").replace("[","").replace("]","").split(",")); console.log(res) })
             .catch(err => console.log(err))
-
     };
-    function clickHandler(e:any) {
+    function clickHandler(e: any) {
+
         Login()
-        console.log(formData);
+        
+
     }
-    const [formData, setFormData] = useState({email:"",pww:""})
+
+    const [visible, setVisible] = useState(false);
+    const handler = () => setVisible(true);
+
+    const closeHandler = () => setVisible(false);
+    const [formData, setFormData] = useState({ email: "", password: "" })
     return (
         <>
             <Container
@@ -40,6 +48,20 @@ export default function Login() {
                 justify="center"
                 css={{ minHeight: '100vh' }}
             >
+                <Modal
+                    closeButton
+                    aria-labelledby="modal-title"
+                    open={visible}
+                    onClose={closeHandler}
+                ><Modal.Body>
+                        <Text id="modal-body" size={18}>
+                            Welcome 
+                            <br />
+                            <Text b size={18}>
+                                {userData.map(user=><><span>{user}</span><br></br></>)}
+                            </Text>
+                        </Text>
+                    </Modal.Body></Modal>
                 <Card css={{ mw: '450px', p: '40px' }}>
                     <Image
                         src="logo_derweze.png"
@@ -69,8 +91,8 @@ export default function Login() {
                     />
                     <Spacer y={1} />
                     <Input
-                        value={formData["pww"]}
-                        onChange={(event) => { setFormData({ ...formData, pww: event.target.value }); console.log(formData) }}
+                        value={formData["password"]}
+                        onChange={(event) => { setFormData({ ...formData, password: event.target.value }); console.log(formData) }}
                         clearable
                         bordered
                         fullWidth
@@ -93,7 +115,7 @@ export default function Login() {
                         css={{
                             width: "100%",
                         }}
-                        onClick={(e) => { clickHandler(e); }}
+                        onClick={(e) => { clickHandler(e); handler() }}
                     >
                         Sign in
                     </Button>

@@ -10,7 +10,7 @@ RUN mkdir -p $YARN_CACHE_FOLDER
 RUN mkdir -p /app
 RUN mkdir /usr/local/share/ca-certificates
 RUN touch /usr/local/share/ca-certificates/devcert.crt  
-RUN apk add openssl sudo
+RUN apk add openssl sudo ca-certificates
 # Set /app as the working directory
 WORKDIR /app
 
@@ -31,4 +31,4 @@ EXPOSE 3000
 # Run yarn dev, as we would via the command line 
 
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "devssl"]

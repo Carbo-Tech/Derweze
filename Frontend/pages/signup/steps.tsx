@@ -22,11 +22,11 @@ import Box from "@mui/material/Box";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import Signup from ".";
 import "../../components/phoneInput.module.scss";
 
 
-export function SignupSteps({ handleChange, formData }) {
+export function SignupSteps({ handleChange, formData, signup }) {
     const [step, setStep] = useState("MailPasswd");
 
     function clickHandler(event: any, step: string) {
@@ -57,7 +57,7 @@ export function SignupSteps({ handleChange, formData }) {
         handleChange((event))
     }
 
-    function StepMailPasswd({ handleChange,stateMailPasswd }: any) {
+    function StepMailPasswd({ handleChange, stateMailPasswd }: any) {
 
         const [phone, setPhone] = useState("");
         const [state, setState] = useState({ ...formData })
@@ -127,6 +127,9 @@ export function SignupSteps({ handleChange, formData }) {
                         width: "100%",
                         borderWidth: "2px",
                     }}
+ 
+           
+                    dropdownStyle={{transform: "translate(0%, -100%)"}}
                     country={"it"}
                     value={state["phone"]}
                     onChange={(phone) => setState({ ...state, phone: phone })}
@@ -152,7 +155,7 @@ export function SignupSteps({ handleChange, formData }) {
 
     function StepData({ handleChange }: any) {
         const [value, setValue] = useState(null);
-        const [state, setState] = useState({ ...formData});
+        const [state, setState] = useState({ ...formData });
         const [selected, setSelected] = React.useState(new Set(["text"]));
         return (
             <>
@@ -237,7 +240,7 @@ export function SignupSteps({ handleChange, formData }) {
                         label="Birthday"
                         value={state["birthday"]}
                         onChange={(newValue) => {
-                            setState({...state,birthday:newValue});
+                            setState({ ...state, birthday: newValue });
                             console.log(state);
                         }}
                         renderInput={({ inputRef, inputProps, InputProps }) => (
@@ -264,7 +267,7 @@ export function SignupSteps({ handleChange, formData }) {
                 <Input
                     name="fCode"
                     value={state["fCode"]}
-                    onChange={(event) => { setState({ ...state, fCode: event.target.value })}}
+                    onChange={(event) => { setState({ ...state, fCode: event.target.value }) }}
                     clearable
                     bordered
                     fullWidth
@@ -277,7 +280,7 @@ export function SignupSteps({ handleChange, formData }) {
                 <Spacer y={1} />
                 <Grid.Container>
                     <Grid xs={3}>
-                        <Button auto onClick={(e) => {clickHandler(e, "MailPasswd"); handleChange(state); console.log(state)}}>
+                        <Button auto onClick={(e) => { clickHandler(e, "MailPasswd"); handleChange(state); console.log(state) }}>
                             &lt;
                         </Button>
                     </Grid>
@@ -287,7 +290,7 @@ export function SignupSteps({ handleChange, formData }) {
                             css={{
                                 width: "100%",
                             }}
-                            onClick={(e) => {clickHandler(e, "Address"); handleChange(state)}}
+                            onClick={(e) => { clickHandler(e, "Address"); handleChange(state) }}
                         >
                             Next
                         </Button>
@@ -297,7 +300,7 @@ export function SignupSteps({ handleChange, formData }) {
         );
     }
     function StepAddress({ handleChange }: any) {
-        const [state, setState] = useState({ ...formData});
+        const [state, setState] = useState({ ...formData });
         return (
             <>
                 <Text
@@ -311,13 +314,48 @@ export function SignupSteps({ handleChange, formData }) {
                     Derweze address
                 </Text>
                 <Grid.Container>
+
+                <Grid xs={6}>
+                        <Input
+                            clearable
+                            bordered
+                            name="Nation"
+                            value={state["nation"]}
+                            onChange={(event) => { setState({ ...state, nation: event.target.value }) }}
+                            fullWidth
+                            color="primary"
+                            size="lg"
+                            placeholder="Nation"
+                            aria-label="Nation"
+                        />
+                    </Grid>
+                    <Grid xs={1}></Grid>
+                    <Grid xs={5}>
+                        <Input
+                            clearable
+                            bordered
+                            name="province"
+                            value={state["province"]}
+                            onChange={(event) => { setState({ ...state, province: event.target.value }) }}
+                            fullWidth
+                            color="primary"
+                            size="lg"
+                            placeholder="Province"
+                            aria-label="province"
+                        />
+                    </Grid>
+
+                <Grid xs={12}>
+                        <Spacer y={1} />
+                    </Grid>
+
                     <Grid xs={7}>
                         <Input
                             clearable
                             bordered
                             name="city"
                             value={state["city"]}
-                            onChange={(event) => { setState({ ...state, city: event.target.value })}}
+                            onChange={(event) => { setState({ ...state, city: event.target.value }) }}
                             fullWidth
                             color="primary"
                             size="lg"
@@ -331,9 +369,9 @@ export function SignupSteps({ handleChange, formData }) {
                             clearable
                             bordered
                             name="zipCode"
-                            type="number" 
+                            type="number"
                             value={state["zipCode"]}
-                            onChange={(event) => { setState({ ...state, zipCode: event.target.value })}}
+                            onChange={(event) => { setState({ ...state, zipCode: event.target.value }) }}
                             fullWidth
                             color="primary"
                             size="lg"
@@ -352,7 +390,7 @@ export function SignupSteps({ handleChange, formData }) {
                             bordered
                             name="street"
                             value={state["street"]}
-                            onChange={(event) => { setState({ ...state, street: event.target.value })}}
+                            onChange={(event) => { setState({ ...state, street: event.target.value }) }}
                             fullWidth
                             color="primary"
                             size="lg"
@@ -369,7 +407,7 @@ export function SignupSteps({ handleChange, formData }) {
 
                             name="streetNumber"
                             value={state["streetNumber"]}
-                            onChange={(event) => { setState({ ...state, streetNumber: event.target.value })}}
+                            onChange={(event) => { setState({ ...state, streetNumber: event.target.value }) }}
                             color="primary"
                             size="lg"
                             placeholder="N."
@@ -381,7 +419,7 @@ export function SignupSteps({ handleChange, formData }) {
 
                 <Grid.Container>
                     <Grid xs={3}>
-                        <Button auto onClick={(e) => {clickHandler(e, "Data"); handleChange(state)}}>
+                        <Button auto onClick={(e) => { clickHandler(e, "Data"); handleChange(state) }}>
                             &lt;
                         </Button>
                     </Grid>
@@ -390,7 +428,7 @@ export function SignupSteps({ handleChange, formData }) {
                             css={{
                                 width: "100%",
                             }}
-                            onClick={(e) => {alert("Congratulazioni"); handleChange(state)}}
+                            onClick={(e) => { signup(); handleChange(state) }}
                         >
                             Complete
                         </Button>
