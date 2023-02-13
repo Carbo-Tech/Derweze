@@ -47,7 +47,7 @@ def get_conn() -> MySQLConnection:
     Returns a connection to the MySQL database.
     """
     conn = mysql.connector.connect(
-        host='localhost',
+        host='mysql',
         user='root',
         password='passwordsicura',
         database='derweze'
@@ -60,9 +60,10 @@ def add_user(conn: MySQLConnection, user: User) -> None:
     Adds a user to the database
     """
     cursor = conn.cursor()
-    insert_query = 'INSERT INTO users (email, password) VALUES (%s, SHA1(%s))'
+    insert_query = 'INSERT INTO user (email, password) VALUES (%s, SHA1(%s))'
     cursor.execute(insert_query, (user.email, user.password))
     conn.commit()
+    cursor.close()
 
 
 def add_registry(conn: MySQLConnection, registry: Registry) -> None:
@@ -78,12 +79,12 @@ def add_registry(conn: MySQLConnection, registry: Registry) -> None:
         telephone_number,
         social_security_number,
         is_admin,
-        address,
-        civic_number,
-        cap,
-        city,
-        province,
-        nation
+        Indirizzo,
+        Civico,
+        CAP,
+        Localita,
+        Provincia,
+        Nazione
     )
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     '''
@@ -104,18 +105,21 @@ def add_registry(conn: MySQLConnection, registry: Registry) -> None:
         registry.nation
     ))
     conn.commit()
+    cursor.close()
 
 
-def get_user_by_email(conn: MySQLConnection, email: str) -> User:
+def get_user_by_email(conn: MySQLConnection, email: str) -> Optional[User]:
     """
     Returns the user with the given email address
     """
     cursor = conn.cursor()
-    select_query = 'SELECT * FROM users WHERE email = %s'
+    select_query = 'SELECT * FROM user WHERE email = %s'
     cursor.execute(select_query, (email,))
     result = cursor.fetchone()
     cursor.close()
-    return User(email=result[1], password=result[2])
+    if result is not None:
+        return User(email=result[1], password=result[2])
+
 
 
 def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] = None) -> bytes:
@@ -208,7 +212,7 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
 
 
 @app.post("/signup")
-def signup(user: User, registry: Registry, conn: MySQLConnection = Depends(get_conn)):
+async def signup(user: User, registry: Registry, conn: MySQLConnection = Depends(get_conn)):
     # Check if email already exists in the database
     db_user = get_user_by_email(conn, user.email)
     if db_user:
