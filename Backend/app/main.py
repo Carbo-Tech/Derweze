@@ -130,9 +130,9 @@ def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] 
 
     # Set the token's expiration time
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + datetime.timedelta(minutes=15)
+        expire = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
 
     # Add the expiration time to the data to be encoded
     to_encode.update({"exp": expire})
@@ -191,7 +191,10 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
 
     # Hash the password using the SHA1 function
     password = user.password.encode()
-    hashed_password = conn.execute("SELECT SHA1(%s)", password).fetchone()[0]
+    cursor = conn.cursor()
+    cursor.execute("SELECT SHA1(%s)", (password,))
+    hashed_password = cursor.fetchone()[0]
+    cursor.close()
 
     # Compare the hashed password with the one in the database
     if db_user.password != hashed_password:

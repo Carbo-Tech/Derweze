@@ -1,6 +1,4 @@
 fastapi
-uvicorn
 mysql-connector-python
 PyJWT
-jwt
 pydantic
