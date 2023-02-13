@@ -207,8 +207,8 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.post("/registry")
-def api_registry(user: User, registry: Registry, conn: MySQLConnection = Depends(get_conn)):
+@app.post("/signup")
+def signup(user: User, registry: Registry, conn: MySQLConnection = Depends(get_conn)):
     # Check if email already exists in the database
     db_user = get_user_by_email(conn, user.email)
     if db_user:
