@@ -36,7 +36,7 @@
     "react-phone-input-2": "^2.15.1",
     "react-transition-group": "^4.4.5",
     "require": "^0.4.4",
-    "sass": "^1.57.1",
+    "sass": "^1.58.1",
     "swr": "^2.0.3",
     "typescript": "4.9.5"
   },
