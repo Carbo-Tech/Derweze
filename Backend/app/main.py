@@ -61,7 +61,7 @@ def add_user(conn: MySQLConnection, user: User) -> None:
     Adds a user to the database
     """
     cursor = conn.cursor()
-    insert_query = 'INSERT INTO user (email, password) VALUES (%s, SHA1(%s))'
+    insert_query = 'INSERT INTO user (id, email, password) VALUES (LAST_INSERT_ID(), %s, SHA2(%s, 256))'
     cursor.execute(insert_query, (user.email, user.password))
     conn.commit()
     cursor.close()
