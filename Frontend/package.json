@@ -37,7 +37,7 @@
     "react-transition-group": "^4.4.5",
     "require": "^0.4.4",
     "sass": "^1.58.3",
-    "swr": "^2.0.3",
+    "swr": "^2.0.4",
     "typescript": "4.9.5"
   },
   "devDependencies": {
