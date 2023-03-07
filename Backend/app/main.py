@@ -61,8 +61,8 @@ def add_user(conn: MySQLConnection, user: User) -> None:
     Adds a user to the database
     """
     cursor = conn.cursor()
-    insert_query = 'INSERT INTO user (id, email, password) VALUES (LAST_INSERT_ID(), %s, SHA2(%s, 256))'
-    cursor.execute(insert_query, (user.email, user.password))
+    insert_query = 'INSERT INTO user (id, email, password) VALUES (LAST_INSERT_ID(), %s, SHA2(CONCAT(%s,%s) 256))'
+    cursor.execute(insert_query, (user.email, user.email, user.password))
     conn.commit()
     cursor.close()
 
@@ -193,7 +193,7 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
     # Hash the password using the SHA1 function
     password = user.password.encode()
     cursor = conn.cursor()
-    cursor.execute("SELECT SHA1(%s)", (password,))
+    cursor.execute("SELECT SHA2(CONCAT(%s,%s),256)", (user.email,password))
     hashed_password = cursor.fetchone()[0]
     cursor.close()
 
@@ -220,10 +220,10 @@ async def get_user_data(user: User, conn: MySQLConnection = Depends(get_conn)):
 
     
     cursor = conn.cursor()
-    query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s and password=SHA1(%s))"""
+    query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s and password=SHA2(CONCAT(%s,%s), 256))"""
 
     
-    cursor.execute(query,(user.email,user.password))
+    cursor.execute(query,(user.email,user.email,user.password))
     return str(cursor.fetchall())
     
     
