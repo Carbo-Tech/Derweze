@@ -13,6 +13,7 @@ updates:
     open-pull-requests-limit: 99
     labels:
       - "npm"
+      - "dependencies"
 
   - package-ecosystem: "github-actions"
     directory: "/"
