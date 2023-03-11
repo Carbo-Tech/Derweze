@@ -14,6 +14,7 @@ updates:
     labels:
       - "npm"
       - "dependencies"
+    author: "dependabot[bot]"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule: 
@@ -22,4 +23,5 @@ updates:
     labels:
       - "gitActions"
       - "dependencies"
+    author: "dependabot[bot]"
 
