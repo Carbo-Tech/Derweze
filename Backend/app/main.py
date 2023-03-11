@@ -8,6 +8,7 @@ app = FastAPI()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
+
 @app.post("/login", response_model=Dict[str, str])
 async def login(user: User) -> Dict[str, str]:
     """
@@ -38,7 +39,7 @@ async def login(user: User) -> Dict[str, str]:
 
 
 @app.post("/getUserData")
-async def get_user_data(token: Dict[str,str]) -> Registry:
+async def get_user_data(token: Dict[str, str]) -> Registry:
     """
     Endpoint to get registry data for a user.
 
