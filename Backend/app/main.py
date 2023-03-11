@@ -40,7 +40,6 @@ class Registry(BaseModel):
     city: str
     province: str
     nation: str
-    
 
 
 def get_conn() -> MySQLConnection:
@@ -122,7 +121,6 @@ def get_user_by_email(conn: MySQLConnection, email: str) -> Optional[User]:
         return User(email=result[1], password=result[2])
 
 
-
 def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] = None) -> bytes:
     """
     Creates a JSON Web Token with the given data
@@ -193,7 +191,7 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
     # Hash the password using the SHA1 function
     password = user.password.encode()
     cursor = conn.cursor()
-    cursor.execute("SELECT SHA1(%s)", (password,))
+    cursor.execute("SELECT SHA2(CONCAT(%s,%s),256)", (user.email, password))
     hashed_password = cursor.fetchone()[0]
     cursor.close()
 
@@ -218,16 +216,10 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
 @app.post("/getUserData")
 async def get_user_data(user: User, conn: MySQLConnection = Depends(get_conn)):
 
-    
     cursor = conn.cursor()
     query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s and password=SHA1(%s))"""
-
-    
-    cursor.execute(query,(user.email,user.password))
+    cursor.execute(query, (user.email, user.password))
     return str(cursor.fetchall())
-    
-    
-    
 
 
 @app.post("/signup")
