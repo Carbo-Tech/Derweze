@@ -13,10 +13,6 @@ updates:
     open-pull-requests-limit: 99
     labels:
       - "npm"
-      - "dependencies"
-    # Automatically merge pull requests when they're ready
-    pull_request:
-      merge_method: merge
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -26,6 +22,3 @@ updates:
     labels:
       - "gitActions"
       - "dependencies"
-    # Automatically merge pull requests when they're ready
-    pull_request:
-      merge_method: merge
