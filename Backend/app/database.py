@@ -2,7 +2,6 @@ from typing import Optional
 import mysql.connector
 from mysql.connector.connection import MySQLConnection
 from pydantic import BaseModel
-import hashlib
 
 
 class Database:
