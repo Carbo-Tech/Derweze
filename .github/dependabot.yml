@@ -14,12 +14,12 @@ updates:
     labels:
       - "npm"
       - "dependencies"
+
   - package-ecosystem: "github-actions"
     directory: "/"
-    schedule: 
-     interval: daily
+    schedule:
+      interval: daily
     open-pull-requests-limit: 99
     labels:
       - "gitActions"
       - "dependencies"
-
