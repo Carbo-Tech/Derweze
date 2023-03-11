@@ -1,9 +1,8 @@
 from typing import Dict
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from database import get_user_by_email, get_registry_by_user, check_for_user, add_user, add_registry, validate_user, Database, User, Registry
+from database import get_user_by_email, get_registry_by_user, add_user, add_registry, validate_user, User, Registry
 from auth import create_access_token, get_current_user
-from mysql.connector.connection import MySQLConnection
 
 app = FastAPI()
 
