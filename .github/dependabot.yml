@@ -10,20 +10,22 @@ updates:
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: "daily"
-    # Automatically merge the pull request if CI passes
-    auto-merge: true
-    # Add labels to the pull request
+    open-pull-requests-limit: 99
     labels:
       - "npm"
       - "dependencies"
+    # Automatically merge pull requests when they're ready
+    pull_request:
+      merge_method: merge
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: daily
-    # Automatically merge the pull request if CI passes
-    auto-merge: true
-    # Add labels to the pull request
+    open-pull-requests-limit: 99
     labels:
       - "gitActions"
       - "dependencies"
+    # Automatically merge pull requests when they're ready
+    pull_request:
+      merge_method: merge
