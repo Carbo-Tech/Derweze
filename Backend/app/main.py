@@ -8,13 +8,19 @@ app = FastAPI()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-
 @app.post("/login", response_model=Dict[str, str])
 async def login(user: User) -> Dict[str, str]:
     """
     Login endpoint for the user.
-    It receives a User object containing email and password.
-    It returns a JSON response containing the access token and token type.
+
+    Parameters:
+    user (User): A user object containing email and password.
+
+    Returns:
+    A dictionary containing the access token and token type.
+
+    Raises:
+    HTTPException: If the password is incorrect.
     """
     # Compare the hashed password with the one in the database
     if not validate_user(user):
@@ -32,11 +38,19 @@ async def login(user: User) -> Dict[str, str]:
 
 
 @app.post("/getUserData")
-async def get_user_data(token: Dict[str:str]) -> Registry:
+async def get_user_data(token: Dict[str,str]) -> Registry:
     """
     Endpoint to get registry data for a user.
-    """
 
+    Parameters:
+    token (Dict[str,str]): A dictionary containing the access token.
+
+    Returns:
+    A Registry object containing the registry data for the user.
+
+    Raises:
+    HTTPException: If registry data is not found.
+    """
     current_user: User = get_current_user(token)
 
     # Get registry data for the user
@@ -53,9 +67,18 @@ async def get_user_data(token: Dict[str:str]) -> Registry:
 async def signup(user: User, registry: Registry):
     """
     Endpoint to create a new user and registry.
-    """
 
-    if get_user_by_email(user.email) is None:
+    Parameters:
+    user (User): A user object containing email and password.
+    registry (Registry): A registry object containing registry data for the user.
+
+    Returns:
+    A dictionary containing the access token for the new user.
+
+    Raises:
+    HTTPException: If a user with the same email already exists.
+    """
+    if get_user_by_email(user.email) is not None:
         raise HTTPException(
             status_code=400, detail="User with this email already exists")
 
