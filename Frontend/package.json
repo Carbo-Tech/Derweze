@@ -17,7 +17,7 @@
     "@mui/material": "^5.11.12",
     "@mui/system": "^5.11.7",
     "@mui/x-date-pickers": "^6.0.0",
-    "@next/font": "13.2.3",
+    "@next/font": "13.2.4",
     "@nextui-org/react": "^1.0.0-beta.11",
     "@svgr/webpack": "^6.5.1",
     "@types/node": "18.15.0",
