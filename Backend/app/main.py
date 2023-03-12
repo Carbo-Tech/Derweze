@@ -21,6 +21,7 @@ class User(BaseModel):
     """
     email: str
     password: str
+    
 
 
 class Registry(BaseModel):
@@ -60,12 +61,19 @@ def add_user(conn: MySQLConnection, user: User) -> None:
     """
     Adds a user to the database
     """
+    registry_error_exception = HTTPException(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        detail="Could not insert registry",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
     cursor = conn.cursor()
-    insert_query = 'INSERT INTO user (id, email, password) VALUES (LAST_INSERT_ID(), %s, SHA2(CONCAT(%s,%s) 256))'
-    cursor.execute(insert_query, (user.email, user.email, user.password))
-    conn.commit()
-    cursor.close()
-
+    insert_query = 'SELECT RegisterUser(%s,%s)'
+    cursor.execute(insert_query, (user.email, user.password))
+    if cursor.fetchone():
+        conn.commit()
+        cursor.close()
+    else:
+        raise registry_error_exception
 
 def add_registry(conn: MySQLConnection, registry: Registry) -> None:
     """
@@ -109,6 +117,19 @@ def add_registry(conn: MySQLConnection, registry: Registry) -> None:
     cursor.close()
 
 
+def get_salt_by_email(conn: MySQLConnection, email: str) -> Optional[str]:
+    """
+    Returns the salt with the given email address
+    """
+    cursor = conn.cursor()
+    select_query = 'SELECT salt FROM user WHERE email = %s'
+    cursor.execute(select_query, (email,))
+    result = cursor.fetchone()
+    cursor.close()
+    if result is not None:
+        return result["salt"]
+
+
 def get_user_by_email(conn: MySQLConnection, email: str) -> Optional[User]:
     """
     Returns the user with the given email address
@@ -119,7 +140,7 @@ def get_user_by_email(conn: MySQLConnection, email: str) -> Optional[User]:
     result = cursor.fetchone()
     cursor.close()
     if result is not None:
-        return User(email=result[1], password=result[2])
+        return User(email=result["email"],salt=result["salt"], password=result["password"])
 
 
 
@@ -190,10 +211,12 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
             detail="Incorrect email or password"
         )
 
-    # Hash the password using the SHA1 function
+    # Hash the password using the SHA2 function
     password = user.password.encode()
     cursor = conn.cursor()
-    cursor.execute("SELECT SHA2(CONCAT(%s,%s),256)", (user.email,password))
+    
+    
+    cursor.execute("SELECT SHA2(CONCAT(%s,CONCAT(%s,%s)),256)", (user.email,get_salt_by_email(user.email),password))
     hashed_password = cursor.fetchone()[0]
     cursor.close()
 
@@ -220,7 +243,7 @@ async def get_user_data(user: User, conn: MySQLConnection = Depends(get_conn)):
 
     
     cursor = conn.cursor()
-    query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s and password=SHA2(CONCAT(%s,%s), 256))"""
+    query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s AND password=SHA2(CONCAT(%s,CONCAT(salt,%s)), 256))"""
 
     
     cursor.execute(query,(user.email,user.email,user.password))

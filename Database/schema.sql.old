@@ -135,7 +135,7 @@ CREATE TABLE `registry` (
   `Provincia` char(2) NOT NULL,
   `Nazione` char(2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,7 +144,7 @@ CREATE TABLE `registry` (
 
 LOCK TABLES `registry` WRITE;
 /*!40000 ALTER TABLE `registry` DISABLE KEYS */;
-INSERT INTO `registry` VALUES (1,'ROBERTA','NADINI','NADINI ROBERTA',NULL,NULL,'NDNRRT68L29H193E',0,'VIA ETNA',12,'16134','GENOVA','GE','IT'),(2,'CARLO','CARUFFI','CARUFFI CARLO',NULL,'3471234309','CRFCRL64R25D969X',0,'VIA ROMA',78,'16132','GENOVA','GE','IT'),(3,'GAETANO','CERVISIO','CERVISIO GAETANO',NULL,'3426907124','CRVGTN61L14F939Y',0,'VIA CATANIA',9,'45011','ADRIA','RO','IT'),(4,'ANDREA','CASSATURO','CASSATURO ANDREA',NULL,'3358468334','CSSNDR64E09F809K',0,'PIAZZA SIMONI',62,'80122','NAPOLI','NA','IT'),(5,'ALESSANDRA','BEGHINI','BEGHINI ALESSANDRA',NULL,NULL,'BGNLSN83D14C528F',0,'VIA RIMINI',28,'25033','COLOGNE','BS','IT'),(6,'GABRIELE','MOSETTI','MOSETTI GABRIELE',NULL,'3355234506','MSTGRL75B29Z123K',0,'VIA S. FRANCESCO',71,'25035','OSPITALETTO','BS','IT'),(7,NULL,NULL,'JOLLY FITNESS CLUB','5801231208','3404321089',NULL,0,'VIA MARCONI',72,'80128','NAPOLI','NA','IT'),(8,NULL,NULL,'BAR CARPE DIEM','6044751606','3335754225','SCNLCN86B03E839G',0,'VIA MOROSELLI',15,'80127','NAPOLI','NA','IT'),(9,NULL,NULL,'PANIFICIO PEROTTI','4019077958','3208362856','PRTRPZ71A44F125K',0,'VIA DIAZ',52,'75100','MATERA','MT','IT'),(10,NULL,NULL,'VILLA DOMENICI','7065650630','3481112514','DMZNCL80H28A225V',0,'VICOLO FRIULI',31,'70022','ALTAMURA','BA','IT');
+INSERT INTO `registry` VALUES (1,'ROBERTA','NADINI','NADINI ROBERTA',NULL,NULL,'NDNRRT68L29H193E',0,'VIA ETNA',12,'16134','GENOVA','GE','IT'),(2,'CARLO','CARUFFI','CARUFFI CARLO',NULL,'3471234309','CRFCRL64R25D969X',0,'VIA ROMA',78,'16132','GENOVA','GE','IT'),(3,'GAETANO','CERVISIO','CERVISIO GAETANO',NULL,'3426907124','CRVGTN61L14F939Y',0,'VIA CATANIA',9,'45011','ADRIA','RO','IT'),(4,'ANDREA','CASSATURO','CASSATURO ANDREA',NULL,'3358468334','CSSNDR64E09F809K',0,'PIAZZA SIMONI',62,'80122','NAPOLI','NA','IT'),(5,'ALESSANDRA','BEGHINI','BEGHINI ALESSANDRA',NULL,NULL,'BGNLSN83D14C528F',0,'VIA RIMINI',28,'25033','COLOGNE','BS','IT'),(6,'GABRIELE','MOSETTI','MOSETTI GABRIELE',NULL,'3355234506','MSTGRL75B29Z123K',0,'VIA S. FRANCESCO',71,'25035','OSPITALETTO','BS','IT'),(7,NULL,NULL,'JOLLY FITNESS CLUB','5801231208','3404321089',NULL,0,'VIA MARCONI',72,'80128','NAPOLI','NA','IT'),(8,NULL,NULL,'BAR CARPE DIEM','6044751606','3335754225','SCNLCN86B03E839G',0,'VIA MOROSELLI',15,'80127','NAPOLI','NA','IT'),(9,NULL,NULL,'PANIFICIO PEROTTI','4019077958','3208362856','PRTRPZ71A44F125K',0,'VIA DIAZ',52,'75100','MATERA','MT','IT'),(10,NULL,NULL,'VILLA DOMENICI','7065650630','3481112514','DMZNCL80H28A225V',0,'VICOLO FRIULI',31,'70022','ALTAMURA','BA','IT'),(12,'rwrwrwerwe','dfsfsfds','c','c','393342432432','ssssssssssssss',0,'via cazzo palle',19,'37069','VR','VR','it'),(13,'ciao',NULL,'cs',NULL,NULL,NULL,0,'d',10,'12121','ca','df','ds');
 /*!40000 ALTER TABLE `registry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,12 +156,13 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
+  `salt` char(32) DEFAULT NULL,
   `password` char(64) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_user_id` FOREIGN KEY (`id`) REFERENCES `registry` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,9 +171,53 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'rnadini@google.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(2,'ccaruffi@icloud.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(3,'gaetano.cervisio@gmail.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(4,'cassaturoandrea@libero.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(5,'beghini.alessandra@hotmail.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(6,'gab_mos@yahoo.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(7,'jollyfitnessclub@iol.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(8,'carpediem@hotmail.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(9,'info@panificioperotti.com','fbc8fefd63797471b31c1b7cea848f3af0b010d5'),(10,'info@villadomenici.it','fbc8fefd63797471b31c1b7cea848f3af0b010d5');
+INSERT INTO `user` VALUES (1,'rnadini@google.com','40a1d2d638f84f85cf2e964ae3e8a050','0d7f6c55d6d6c2aebf124bc06794b80dc739981b9f264bd97a291613bbb784c1'),(2,'ccaruffi@icloud.com','b69b0c7bde8237d5e774b5dca6feb81a','ccc26bee76b4ed076d439dac7900cbed29964d1663038d58b6f364cb335c6246'),(3,'gaetano.cervisio@gmail.com','4fe2bd62881bf95f5c0b4e3a7afb938a','e5fee10d5326723ce296370135da5ff6273802bccffbccf2e6640e2affafdfdb'),(4,'cassaturoandrea@libero.it','71a596c68de0b734f60d71784b0003bf','31e0d2646cf656eb76225de8820580e9588ac0c3cb485d6d148576ba87959753'),(5,'beghini.alessandra@hotmail.it','8c566c81bf00c727be26f35484da6988','b52844dd1534bb54bd178ba0062660a3b93a6c49fe6be96670f8f605ecaa9eb0'),(6,'gab_mos@yahoo.com','dbfc30f76daccaee716e4c135e57ea75','66914b3f3ec14aa61bd6b48311df593eb24f2b8101635dc3f8b0888dd6df3b80'),(7,'jollyfitnessclub@iol.it','7b0c15df83ace4329ddf5fbaeaf15fdf','072e7d349b587bc0b9868447f9286ff16627545af203860841c386c96e75dd94'),(8,'carpediem@hotmail.it','8edd4834b3475c98267e9abadf500ca5','da313e58f5289d259e029d4418fe1773fb0af0c95dd50c10131ec8f34c20733e'),(9,'info@panificioperotti.com','982fa4249ba51b543d2565472410b62c','4dc74612b2aeda5aeded3486a141f9a96c0a7bb041c9663f5bd8075ecba6816f'),(10,'info@villadomenici.it','d454d83cee2d3fd89ebc8a0531c7b985','eff0f250e012b97bf2e1dfa747bd46079231f95af5e2adc4363c0c02b58b245e'),(12,'cdfssf','6bb5bdacb2a60c47798b36ff0d097195','9986041319a7a8cc0f8c0cfa2d3c213669c65df6de5d42e65ff4a570968b0ea1'),(13,'ciao','ae59abc8d59202d23ccddbe9e8bbe832','b458e4f5417880a638aa04912b9ee233a9453de62981da98705f0469fc414d63');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `ai_uuidtable` AFTER INSERT ON `user` FOR EACH ROW SET @last_uuid = NEW.salt */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Dumping routines for database 'derweze'
+--
+/*!50003 DROP FUNCTION IF EXISTS `RegisterUser` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `RegisterUser`(email VARCHAR(255),password TEXT) RETURNS int
+    MODIFIES SQL DATA
+BEGIN
+    DECLARE uuidM CHAR(32);
+    DECLARE hashedp CHAR(64);
+    SET uuidM=md5(uuid());
+    SET hashedP=SHA2(CONCAT(email,CONCAT(uuidM,password)),256);
+    INSERT INTO user (id,email,salt,password) VALUES (LAST_INSERT_ID(),email,uuidM,hashedp);
+    RETURN LAST_INSERT_ID();
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -183,4 +228,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-10 11:39:48
+-- Dump completed on 2023-03-12 15:49:29
