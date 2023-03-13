@@ -91,7 +91,16 @@
 ```
 {
   "plans":[
-  {"id":int,"company": string (name of provider),"image":UrlOfTheImage,"basePrice":int,"pricePerKW":int, "priceOscillation": int (in percentage), "estimatedCo2Emittions":int (in g per kw),"estimatedGreenEnergy":int (percentage electricity produced by green energy), "description": string (brief description of the plan)}
+  {
+    "id":int,
+     "company": string (name of provider),
+     "image":UrlOfTheImage,
+     "basePrice":int,
+     "pricePerKW":int, 
+     "priceOscillation": int (in percentage), 
+     "estimatedCo2Emittions":int (in g per kw),
+     "estimatedGreenEnergy":int (percentage electricity produced by green energy), 
+     "description": string (brief description of the plan)}
   ]
 }
 ```
@@ -240,23 +249,12 @@
 #### note
 `/getUserGasBill/` will make a call to mockapi
 
+
 ```
-"electricityUsage":{
-  "co2": int,
-  "records":[
-      {"dateTime": string (MM/dd/hh/mm), "value": int (MQ)},
-      {"dateTime": string (MM/dd/hh/mm), "value": int (MQ)}
-   ]
-
-}
-```
-#### note
-`/getUserGas/` will make a call to mockapi
 
 
 
-
-## Get all  bill 
+## Get all  bills
 
 `/getUserGeneralBill/`
 
