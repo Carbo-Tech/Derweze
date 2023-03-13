@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `contract`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contract` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `idSede` int NOT NULL,
+  `id_domicile` int NOT NULL,
   `service_request_date` datetime(3) NOT NULL,
   `validity_start_date` datetime(3) NOT NULL,
   `validity_end_date` datetime(3) NOT NULL,
@@ -41,8 +41,8 @@ CREATE TABLE `contract` (
   `individual_heating` tinyint(1) DEFAULT NULL,
   `commercial_use` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_contract_idSede` (`idSede`),
-  CONSTRAINT `fk_contract_idSede` FOREIGN KEY (`idSede`) REFERENCES `domicile` (`ID`)
+  KEY `fk_contract_id_domicile` (`id_domicile`),
+  CONSTRAINT `fk_contract_id_domicile` FOREIGN KEY (`id_domicile`) REFERENCES `domicile` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -63,14 +63,14 @@ DROP TABLE IF EXISTS `domicile`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `domicile` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `Descrizione` varchar(255) NOT NULL,
-  `Indirizzo` varchar(255) NOT NULL,
-  `Civico` int NOT NULL,
-  `CAP` char(5) NOT NULL,
-  `Localita` varchar(255) NOT NULL,
-  `Provincia` char(2) NOT NULL,
-  `Nazione` char(2) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `house_number` int NOT NULL,
+  `postal_code` char(5) NOT NULL,
+  `locality` varchar(255) NOT NULL,
+  `province` char(2) NOT NULL,
+  `nation` char(2) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -93,13 +93,13 @@ DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permissions` (
-  `idRegistry` int NOT NULL,
-  `idContract` int NOT NULL,
+  `id_registry` int NOT NULL,
+  `id_contract` int NOT NULL,
   `type` char(1) NOT NULL,
-  KEY `fk_permissions_idRegistry` (`idRegistry`),
-  KEY `fk_permissions_idContract` (`idContract`),
-  CONSTRAINT `fk_permissions_idContract` FOREIGN KEY (`idContract`) REFERENCES `contract` (`id`),
-  CONSTRAINT `fk_permissions_idRegistry` FOREIGN KEY (`idRegistry`) REFERENCES `registry` (`id`)
+  KEY `fk_permissions_id_registry` (`id_registry`),
+  KEY `fk_permissions_id_contract` (`id_contract`),
+  CONSTRAINT `fk_permissions_id_contract` FOREIGN KEY (`id_contract`) REFERENCES `contract` (`id`),
+  CONSTRAINT `fk_permissions_id_registry` FOREIGN KEY (`id_registry`) REFERENCES `registry` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -128,12 +128,12 @@ CREATE TABLE `registry` (
   `telephone_number` varchar(20) DEFAULT NULL,
   `social_security_number` char(16) DEFAULT NULL,
   `is_admin` tinyint(1) DEFAULT '0',
-  `Indirizzo` varchar(255) NOT NULL,
-  `Civico` int NOT NULL,
-  `CAP` char(5) NOT NULL,
-  `Localita` varchar(255) NOT NULL,
-  `Provincia` char(2) NOT NULL,
-  `Nazione` char(2) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `house_number` int NOT NULL,
+  `postal_code` char(5) NOT NULL,
+  `locality` varchar(255) NOT NULL,
+  `province` char(2) NOT NULL,
+  `nation` char(2) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
