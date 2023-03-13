@@ -128,8 +128,8 @@
 | :-------: | :--------: |
 | JWT  |  records of usage   |
 |  idContract |   co2 emitted (kg)  |
-|  time (in seconds, default 2628000 (one month, which means last month)) |     |
-
+|  startTime (in seconds, default 2628000 (one month, which means last month)) |     |
+|  endTime (in seconds, default 0 (which means till now)) |     |
 ```
 "electricityUsage":{
   "co2": int,
@@ -157,7 +157,7 @@
 ```
 "electricityBill":{
   "total":int,
-  "payed": boolean,
+  "paid": boolean,
   "itemized":[
       {"description": string (like "electricity"), "value": int (cost)},
       {"description": string (like "cost of transport"), "value": int (cost)}
@@ -210,7 +210,8 @@
 | :-------: | :--------: |
 | JWT  |  records of usage   |
 |  idContract |   co2 emitted (kg)  |
-|  time (in seconds, default 2628000 (one month, which means last month records)) |     |
+|  startTime (in seconds, default 2628000 (one month, which means last month records)) |     |
+|  endTime (in seconds, default 0 (which means till now)) |     |
 
 ```
 "gasUsage":{
@@ -239,7 +240,7 @@
 ```
 "gasBill":{
   "total":int,
-  "payed": boolean,
+  "paid": boolean,
   "itemized":[
       {"description": string (like "gas"), "value": int (cost)},
       {"description": string (like "cost of transport"), "value": int (cost)}
@@ -265,13 +266,13 @@
 
 ```
 "generalBill":{
-  "payed":int,
-  "notPayed":int
+  "paid":int,
+  "notPaid":int
  }
 ```
 #### note
 `/getUserGeneralBill/` will sum the bill from `getUserGasBill` and  `/getUserElectricityBill/` for every contract of the user
-if the contract bill is payed off, its bill total will be added to payed. Otherwise it will be added to notPayed
+if the contract bill is paid off, its bill total will be added to paid. Otherwise it will be added to notPaid
 
 
 
