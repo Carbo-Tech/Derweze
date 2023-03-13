@@ -41,6 +41,7 @@ def replace_with_null(dict_list: list[dict]):
 
 
 def execute_query(dict_list: list[dict], table: str):
+    complete=0
     try:
         connection = mysql.connector.connect(host='localhost',
                                              user='root',
@@ -53,7 +54,7 @@ def execute_query(dict_list: list[dict], table: str):
             cursor.execute("select database()", "")
             record = cursor.fetchone()
             print("You're connected to database: ", record)
-            print("Performing queries...")
+            print(f"Performing queries on {table} ...", )
             # query
             for dictionary in dict_list:
 
@@ -63,14 +64,17 @@ def execute_query(dict_list: list[dict], table: str):
                     table, columns, placeholders)
                 cursor.execute(sql, list(dictionary.values()))
                 connection.commit()
+                complete += 1
 
             # close connection
             cursor.close()
             connection.close()
-            print("MySQL connection is closed")
+            
     except Error as e:
         print("Error while connecting to MySQL", e)
-
+    finally:
+        print(f"Queries complete [{complete}/{len(dict_list)}]")
+        print("MySQL connection is closed")
 
 def open_file_and_execute_query(filename: str, exclude_args: list[str], table: str):
 
@@ -84,6 +88,49 @@ def open_file_and_execute_query(filename: str, exclude_args: list[str], table: s
                 )),
             table
         )
+
+import csv
+
+# definire la directory dei file
+file_directory = "path/della/directory/dei/file/"
+
+def create_permissions_query():
+    # Lettura dati da file CSV
+    with open(file_directory + 'Anagrafica.csv', encoding='utf-8-sig') as file_anagrafica, \
+         open(file_directory + 'Contratti.csv', encoding='utf-8-sig') as file_contratti, \
+         open(file_directory + 'Sedi.csv', encoding='utf-8-sig') as file_sedi:
+        anagrafica_reader = csv.DictReader(file_anagrafica, delimiter=';')
+        contratti_reader = csv.DictReader(file_contratti, delimiter=';')
+        sedi_reader = csv.DictReader(file_sedi, delimiter=';')
+
+        # Crea un dizionario che associa l'ID dell'anagrafica con i dati dell'anagrafica
+        anagrafiche = {}
+        for row in anagrafica_reader:
+            anagrafiche[row['IDAnagrafica']] = row
+
+        # Crea un dizionario che associa l'ID del contratto con i dati del contratto
+        contratti = {}
+        for row in contratti_reader:
+            contratti[row['IDRigaContratto']] = row
+
+        # Crea un dizionario che associa l'ID della sede con i dati della sede e dell'anagrafica associata
+        sedi = {}
+        for row in sedi_reader:
+            id_anagrafica = row['IDAnagrafica']
+            anagrafica = anagrafiche[id_anagrafica]
+            sede = {**row, **anagrafica}
+            sedi[row['IDSede']] = sede
+
+        # Crea le query di inserimento
+        for id_contratto, contratto in contratti.items():
+            id_sede = contratto['idSede']
+            sede = sedi[id_sede]
+
+            id_registry = sede['IDAnagrafica']
+            id_contract = id_contratto
+            type = 'U'
+
+            print(f"INSERT INTO permissions (idRegistry, idContract, type) VALUES ({id_registry}, {id_contract}, '{type}');")
 
 
 boold = True
@@ -109,7 +156,7 @@ if __name__ == "__main__":
         "domicile"
     )
 
-    file_directory = "./file/"
+    
     with open(file_directory + 'Anagrafiche.csv', encoding='utf-8-sig') as f:
 
         execute_query(
@@ -123,6 +170,8 @@ if __name__ == "__main__":
             ),
             "user"
         )
+
+    create_permissions_query()
 
     if boold:
         print("End")
