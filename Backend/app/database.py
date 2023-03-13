@@ -158,3 +158,6 @@ def get_registry_by_user(user: User) -> Optional[Registry]:
             registry = Registry(**result)
             return registry
         return None
+
+def get_contracts_by_user(current_user):
+    pass

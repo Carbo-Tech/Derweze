@@ -1,8 +1,8 @@
 from typing import Dict
 from fastapi import FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from database import get_user_by_email, get_registry_by_user, add_user, add_registry, validate_user, User, Registry
-from auth import create_access_token, get_current_user
+from database import *
+from auth import *
 
 app = FastAPI()
 
@@ -62,6 +62,35 @@ async def get_user_data(token: Dict[str, str]) -> Registry:
 
     # Return registry data
     return registry
+
+
+@app.post("/getUserContracts")
+async def get_user_contracts(token: Dict[str, str]) -> list[int]:
+    """
+    Endpoint per restituire l'elenco dei contratti associati ad un utente.
+
+    Parameters:
+    token (Dict[str, str]): Un dizionario contenente il token di accesso dell'utente.
+
+    Returns:
+    Un elenco di identificatori (int) dei contratti associati all'utente.
+
+    Raises:
+    HTTPException: se i dati del contratto non sono stati trovati.
+    """
+    # Estrae l'oggetto User corrispondente al token di accesso
+    current_user: User = get_current_user(token)
+
+    # Recupera l'elenco dei contratti associati all'utente corrente
+    contracts: list[int] = get_contracts_by_user(current_user)
+
+    # Se non sono stati trovati contratti, solleva un'eccezione
+    if contracts is None:
+        raise HTTPException(status_code=500, detail="Dati contratto non trovati")
+
+    # Restituisce l'elenco di identificatori dei contratti
+    return contracts
+
 
 
 @app.post("/signup")
