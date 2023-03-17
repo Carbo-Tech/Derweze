@@ -15,16 +15,13 @@ on:
 jobs:
   merge_dependabot:
     runs-on: ubuntu-latest
-    if: |
-      github.event.label.name == 'dependencies' &&
-      github.event.pull_request.user.login == 'dependabot[bot]' &&
-      github.event.pull_request.commits >= 1 &&
-      contains(github.event.pull_request.labels.*.name, 'dependencies')
     steps:
-      - run: |
-          echo "pull_request : ${{ github.event.pull_request }}"
-          echo "pull_request : ${{ github.event.pull_request.labels.*.name }}"
+      - run: 'echo "labels : ${{ github.event.pull_request.labels.*.name }}"'
       - name: Merge pull request
         uses: "pascalgn/automerge-action@v0.15.6"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: "dependencies"
+          MERGE_FILTER_AUTHOR: "dependabot"
+          LOG: "TRACE"
+          MERGE_METHOD: "squash"
