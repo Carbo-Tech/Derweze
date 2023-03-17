@@ -1,4 +1,4 @@
-name: Pull Request Rules
+name: Pull Request Automerge
 
 on:
   pull_request:
