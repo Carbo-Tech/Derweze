@@ -16,7 +16,6 @@ jobs:
   merge_dependabot:
     runs-on: ubuntu-latest
     steps:
-      - run: 'echo "labels : ${{ github.event.pull_request.labels.*.name }}"'
       - name: Merge pull request
         uses: "pascalgn/automerge-action@v0.15.6"
         env:
