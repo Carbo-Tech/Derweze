@@ -18,7 +18,6 @@
 | registry  |  boolean   |
 |   user    |
 
-
 ## Update JWT
 
 `/updateJWT/`
@@ -26,6 +25,7 @@
 | **Input** | **Output** |
 | :-------: | :--------: |
 | JWT  |  JWT (updated)   |
+
 ## Get User Data
 
 `/getUserData/`
@@ -42,9 +42,7 @@
 | :-------: | :--------: |
 | JWT  |  contracts IDs  |
 
-
 ## Get contracts details
-
 
 `/getContractDetails/`
 
@@ -52,8 +50,6 @@
 | :-------: | :--------: |
 | JWT  |  contractDetails   |
 | idContract  |     |
-
-
 
 ## Set user permission to contract
 
@@ -66,8 +62,6 @@
 | contract ID |     |
 | permission (V/E) |     |
 
-
-
 ## Change User Data
 
 `/changeUserData/`
@@ -79,8 +73,6 @@
 | currentPassword  |     |
 | updatedRegistry  |     |
 
-
-
 ## Get possible electricity contracts (for new contracts)
 
 `/getElectricityPlans/`
@@ -88,6 +80,7 @@
 | **Input** | **Output** |
 | :-------: | :--------: |
 | JWT  |  list of contracts   |
+
 ```
 {
   "plans":[
@@ -104,7 +97,9 @@
   ]
 }
 ```
+
 #### note
+
 `/getElectricityPlans/` will make a call to mockapi
 
 ## New contract electricity
@@ -118,6 +113,7 @@
 | currentPassword  |     |
 
 #### note
+
 `/newElectricityContract/` will make a call to mockapi
 
 ## Get user electricity usage
@@ -130,6 +126,7 @@
 |  idContract |   co2 emitted (kg)  |
 |  startTime (in seconds, default 2628000 (one month, which means last month)) |     |
 |  endTime (in seconds, default 0 (which means till now)) |     |
+
 ```
 "electricityUsage":{
   "co2": int,
@@ -140,11 +137,12 @@
 
 }
 ```
+
 #### note
+
 `/getUserElectricity/` will make a call to mockapi
 
-
-## Get user electricity bill 
+## Get user electricity bill
 
 `/getUserElectricityBill/`
 
@@ -164,13 +162,10 @@
     ]
 }
 ```
+
 #### note
+
 `/getUserElectricityBill/` will make a call to mockapi
-
-
-
-
-
 
 ## Get possible gas contracts (for new contracts)
 
@@ -179,6 +174,7 @@
 | **Input** | **Output** |
 | :-------: | :--------: |
 | JWT  |  list of plans   |
+
 ```
 {
   "Plans":[
@@ -186,7 +182,9 @@
   ]
 }
 ```
+
 #### note
+
 `/getGasPlans/` will make a call to mockapi
 
 ## New contract Electricity
@@ -200,6 +198,7 @@
 | currentPassword  |     |
 
 #### note
+
 `/newGasContract/` will make a call to mockapi
 
 ## Get user gas usage
@@ -223,11 +222,12 @@
 
 }
 ```
+
 #### note
+
 `/getUserGas/` will make a call to mockapi
 
-
-## Get user gas bill 
+## Get user gas bill
 
 `/getUserGasBill/`
 
@@ -247,13 +247,10 @@
     ]
 }
 ```
+
 #### note
+
 `/getUserGasBill/` will make a call to mockapi
-
-
-
-
-
 
 ## Get all  bills
 
@@ -270,10 +267,8 @@
   "notPaid":int
  }
 ```
+
 #### note
+
 `/getUserGeneralBill/` will sum the bill from `getUserGasBill` and  `/getUserElectricityBill/` for every contract of the user
 if the contract bill is paid off, its bill total will be added to paid. Otherwise it will be added to notPaid
-
-
-
-
