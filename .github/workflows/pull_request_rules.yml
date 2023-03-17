@@ -2,6 +2,15 @@ name: Pull Request Rules
 
 on:
   pull_request:
+    types:
+      - labeled
+      - unlabeled
+      - synchronize
+      - opened
+      - edited
+      - ready_for_review
+      - reopened
+      - unlocked
 
 jobs:
   merge_dependabot:
@@ -16,7 +25,6 @@ jobs:
           echo "pull_request : ${{ github.event.pull_request }}"
           echo "pull_request : ${{ github.event.pull_request.labels.*.name }}"
       - name: Merge pull request
-        uses: peter-evans/merge-pull-request@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pull_request_number: ${{ github.event.pull_request.number }}
+        uses: "pascalgn/automerge-action@v0.15.6"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
