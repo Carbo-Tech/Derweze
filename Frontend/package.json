@@ -38,7 +38,7 @@
     "require": "^0.4.4",
     "sass": "^1.59.3",
     "swr": "^2.1.0",
-    "typescript": "4.9.5"
+    "typescript": "5.0.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
