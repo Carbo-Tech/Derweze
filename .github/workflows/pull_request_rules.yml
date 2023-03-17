@@ -2,7 +2,6 @@ name: Pull Request Rules
 
 on:
   pull_request:
-    types: [opened, labeled]
 
 jobs:
   merge_dependabot:
