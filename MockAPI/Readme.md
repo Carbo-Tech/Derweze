@@ -6,7 +6,9 @@
 
 | **Input** | **Output** |
 | :-------: | :--------: |
-| JWT  |  list of contracts   |
+| address  |  list of contracts   |
+| type (home/business)  |     |
+
 ```
 {
   "plans":[
@@ -24,17 +26,8 @@
 }
 ```
 
-
-## New contract electricity
-
-`/newElectricityContract/`
-
-| **Input** | **Output** |
-| :-------: | :--------: |
-| JWT  |  boolean   |
-|  idPlan (get from getElectricityPlans) |     |
-| currentPassword  |     |
-
+### note
+the id of the contract will be generated using address as seed and it will be used as seed to generate all the values in the following API calls
 
 
 ## Get user electricity usage
@@ -43,9 +36,8 @@
 
 | **Input** | **Output** |
 | :-------: | :--------: |
-| JWT  |  records of usage   |
 |  idContract |   co2 emitted (kg)  |
-|  startTime (in seconds, default 2628000 (one month, which means last month)) |     |
+|  startTime (in seconds, default 2628000 (one month, which means last month)) | records of usage   |
 |  endTime (in seconds, default 0 (which means till now)) |     |
 
 
@@ -68,8 +60,7 @@
 
 | **Input** | **Output** |
 | :-------: | :--------: |
-| JWT  |  bill   |
-| idContract |  |
+| idContract  |  bill   |
 | month (YYYY/MM) ||
 
 ```
@@ -85,17 +76,15 @@
 
 
 
-
-
-
-
 ## Get possible gas contracts (for new contracts)
 
 `/getGasPlans/`
 
 | **Input** | **Output** |
 | :-------: | :--------: |
-| JWT  |  list of plans   |
+| address  |  list of plans   |
+| type (home/business) |     |
+
 ```
 {
   "Plans":[
@@ -104,15 +93,6 @@
 }
 ```
 
-## New contract Electricity
-
-`/newGasContract/`
-
-| **Input** | **Output** |
-| :-------: | :--------: |
-| JWT  |  boolean   |
-|  idPlan (get from getGasPlans) |     |
-| currentPassword  |     |
 
 
 ## Get user gas usage
@@ -121,10 +101,10 @@
 
 | **Input** | **Output** |
 | :-------: | :--------: |
-| JWT  |  records of usage   |
-|  idContract |   co2 emitted (kg)  |
-|  startTime (in seconds, default 2628000 (one month, which means last month records)) |     |
+|  idContract|  records of usage   |
+|  startTime (in seconds, default 2628000 (one month, which means last month records))|   co2 emitted (kg)  |
 |  endTime (in seconds, default 0 (which means till now)) |     |
+|    |     |
 
 
 ```
@@ -146,8 +126,7 @@
 
 | **Input** | **Output** |
 | :-------: | :--------: |
-| JWT  |  bill   |
-| idContract |  |
+| idContract | bill |
 | month (YYYY/MM) ||
 
 ```
