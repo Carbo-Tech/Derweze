@@ -13,6 +13,9 @@ jobs:
       github.event.pull_request.commits > 1 &&
       contains(github.event.pull_request.labels.*.name, 'dependencies')
     steps:
+      - run: |
+          echo "pull_request : ${{ github.event.pull_request }}"
+          echo "pull_request : ${{ github.event.pull_request.labels.*.name }}"
       - name: Merge pull request
         uses: peter-evans/merge-pull-request@v3
         with:
