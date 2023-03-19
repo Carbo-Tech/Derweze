@@ -19,7 +19,7 @@ import Footer from "../../components/Footer";
 import React, { useState } from "react";
 import "dayjs/locale/it";
 import Box from "@mui/material/Box";
-import {SignupSteps} from "./steps";
+import { SignupSteps } from "./steps";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -28,28 +28,31 @@ import "../../components/phoneInput.module.scss";
 
 export default function Signup() {
   const [step, setStep] = useState("MailPasswd");
-  const [formData, setFormData] = React.useState({birthday:null})
+  const [formData, setFormData] = React.useState({ birthday: null })
 
-   const handleChange=(state: any)=> {
-     
-     setFormData({
-       ...formData,
-       ...state
-      })
-      console.log(formData)
+  const handleChange = (state: any) => {
+
+    setFormData({
+      ...formData,
+      ...state
+    })
+    console.log(formData)
   }
   function Signup() {
     fetch("/api/signup", {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify(formData)
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify(formData)
 
     })
-        .then(response => response.json())
-        .then(res => {alert(res["message"]); console.log(res) })
-        .catch(err => console.log(err))
-};
+      .then(response => response.json())
+      .then(res => { alert(res["message"]); console.log(res) })
+      .catch(err => console.log(err))
+  };
+  const handleSubmit = (state) => {
 
+    console.log(state)
+  };
   return (
     <>
       <Container
@@ -65,8 +68,11 @@ export default function Signup() {
             width={80}
             height={80}
           />
-
-          <SignupSteps handleChange={handleChange} signup={Signup} formData={formData} />
+          <form onSubmit={(event) => {
+            event.preventDefault();
+          }}>
+            <SignupSteps onSubmit={handleSubmit} />
+          </form>
         </Card>
       </Container>
       <Footer />
