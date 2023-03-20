@@ -1,4 +1,19 @@
-import { createGlobalStyle } from 'styled-components'
+import { DefaultTheme, createGlobalStyle } from 'styled-components'
+
+declare module 'styled-components' {
+  export interface DefaultTheme {
+    colors: {
+      primary: string;
+    };
+  }
+}
+
+const theme: DefaultTheme = {
+  colors: {
+    primary: '#000000', // sostituisci questo con il tuo colore primario
+    // Aggiungi qui gli altri colori che vuoi utilizzare
+  },
+};
 
 const GlobalStyle = createGlobalStyle`
   html,

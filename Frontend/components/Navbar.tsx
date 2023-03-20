@@ -1,5 +1,5 @@
-import { Box, Heading, List, ListItem, Text } from '@chakra-ui/react'
-import Link from 'next/link'
+import { Box, Heading, List, ListItem, Text } from "@chakra-ui/react";
+import Link from "next/link";
 
 export default function Navbar() {
   return (
@@ -17,27 +17,15 @@ export default function Navbar() {
       </Heading>
       <List spacing={3}>
         <ListItem>
-          <Link href="/">
-            
-              Home
-        
-          </Link>
+          <Link href="/">Home</Link>
         </ListItem>
         <ListItem>
-          <Link href="/about">
-           
-              About
-           
-          </Link>
+          <Link href="/about">About</Link>
         </ListItem>
         <ListItem>
-          <Link href="/contact">
-           
-              Contact
-           
-          </Link>
+          <Link href="/contact">Contact</Link>
         </ListItem>
       </List>
     </Box>
-  )
+  );
 }
