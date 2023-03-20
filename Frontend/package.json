@@ -38,7 +38,7 @@
     "react-icons": "^4.8.0",
     "react-phone-input-2": "^2.15.1",
     "react-transition-group": "^4.4.5",
-    "require": "^0.4.4",
+    "require": "^2.4.20",
     "sass": "^1.59.3",
     "swr": "^2.1.0",
     "typescript": "5.0.2"
