@@ -12,10 +12,14 @@ import {
     Checkbox,
     Container,
 } from '@nextui-org/react';
+import { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 import { useState } from 'react';
+
 export default function Login() {
     const [userData, setUserData] = useState([]);
+    const router = useRouter();
+    
     function Login() {
         fetch("/api/login", {
             method: 'POST',
@@ -27,9 +31,13 @@ export default function Login() {
             .then(res => { setUserData(res["message"]["reso"].replace("(","").replace(")","").replace("[","").replace("]","").split(",")); console.log(res) })
             .catch(err => console.log(err))
     };
+    function FakeLogin() {
+        router.push('/');
+    };
     function clickHandler(e: any) {
 
-        Login()
+        /*Login()*/
+        FakeLogin()
         
 
     }
@@ -115,7 +123,7 @@ export default function Login() {
                         css={{
                             width: "100%",
                         }}
-                        onClick={(e) => { clickHandler(e); handler() }}
+                        onClick={(e) => { FakeLogin()/*clickHandler(e); handler()*/ }}
                     >
                         Sign in
                     </Button>
