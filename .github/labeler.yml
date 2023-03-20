@@ -4,10 +4,10 @@ documentation:
 workflows:
   - .github/workflows/*
 Database:
-  - Derweze/Database/*
+  - Database/*
 Backend:
-  - Derweze/Backend/*
+  - Backend/*
 Frontend:
-  - Derweze/Frontend/*
+  - Frontend/*
 MockAPI:
-  - Derweze/MockAPI/*
+  - MockAPI/*
