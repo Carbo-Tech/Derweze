@@ -19,7 +19,7 @@ import { useState } from 'react';
 export default function Login() {
     const [userData, setUserData] = useState([]);
     const router = useRouter();
-    
+
     function Login() {
         fetch("/api/login", {
             method: 'POST',
@@ -28,17 +28,19 @@ export default function Login() {
 
         })
             .then(response => response.json())
-            .then(res => { setUserData(res["message"]["reso"].replace("(","").replace(")","").replace("[","").replace("]","").split(",")); console.log(res) })
+            .then(res => { setUserData(res["message"]["reso"].replace("(", "").replace(")", "").replace("[", "").replace("]", "").split(",")); console.log(res) })
             .catch(err => console.log(err))
     };
     function FakeLogin() {
-        router.push('/');
+        if (formData.email === "rnadini@google.com" ) {
+            router.push('/');
+        } 
     };
     function clickHandler(e: any) {
 
         /*Login()*/
         FakeLogin()
-        
+
 
     }
 
@@ -63,10 +65,10 @@ export default function Login() {
                     onClose={closeHandler}
                 ><Modal.Body>
                         <Text id="modal-body" size={18}>
-                            Welcome 
+                            Welcome
                             <br />
                             <Text b size={18}>
-                                {userData.map(user=><><span>{user}</span><br></br></>)}
+                                {userData.map(user => <><span>{user}</span><br></br></>)}
                             </Text>
                         </Text>
                     </Modal.Body></Modal>

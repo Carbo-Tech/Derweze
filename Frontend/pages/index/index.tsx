@@ -6,6 +6,7 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import Chart from './chart';
 import { Spacer } from '@nextui-org/react';
+import { borderRadius } from '@mui/system';
 const lineData = {
   labels: ['Electricity ', 'Delivery', 'Regulatory charges', 'Other charges', 'Taxes'],
   datasets: [
@@ -38,8 +39,10 @@ export default function Index() {
     <>
       <Header />
       <Spacer y={1}></Spacer>
-      <Text fontSize="2xl" fontWeight="bold" textAlign="center" marginBottom="20px">Bentornata Roberta</Text>
+      
+      <div style={{ backgroundColor: "#333333" , margin:"50px",display: "flex", flexDirection: "column", minHeight: "70vh", borderRadius: "10px" }}>
       <Flex direction="row" marginLeft="200px" marginRight="200px"  padding="20px" justifyContent="space-between">
+
         <Box marginLeft="10%">
           <Chart data={lineData} radius={130} thicknessP={20} text="Electricity"></Chart>
         </Box>
@@ -48,6 +51,8 @@ export default function Index() {
 
         </Box>
       </Flex>
+        </div>
+
       <Footer />
     </>
   );

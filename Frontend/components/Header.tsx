@@ -7,7 +7,7 @@ export default function App() {
   const variants = ["static", "floating", "sticky"];
   
   return (
-      <Navbar isBordered variant={variant}>
+      <Navbar  maxWidth="fluid" isBordered variant={variant}>
         <Navbar.Brand>
           <img src="logo_derweze.png" height="50px"/>
 
