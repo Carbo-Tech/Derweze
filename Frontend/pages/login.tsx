@@ -31,17 +31,9 @@ export default function Login() {
             .then(res => { setUserData(res["message"]["reso"].replace("(", "").replace(")", "").replace("[", "").replace("]", "").split(",")); console.log(res) })
             .catch(err => console.log(err))
     };
-    function FakeLogin() {
-        if (formData.email === "rnadini@google.com" ) {
-            router.push('/');
-        } 
-    };
+
     function clickHandler(e: any) {
-
-        /*Login()*/
-        FakeLogin()
-
-
+        Login()
     }
 
     const [visible, setVisible] = useState(false);
@@ -125,7 +117,7 @@ export default function Login() {
                         css={{
                             width: "100%",
                         }}
-                        onClick={(e) => { FakeLogin()/*clickHandler(e); handler()*/ }}
+                        onClick={(e) => {clickHandler(e); handler() }}
                     >
                         Sign in
                     </Button>

@@ -25,7 +25,7 @@ const barData = {
   datasets: [
     {
       label: 'My First Dataset',
-      data: [90, 59, 40, 81, 56, 55, 10],
+      data: [90, 59, 40, 81, 56],
 
       borderWidth: 1,
     },
@@ -36,7 +36,7 @@ const barData = {
 
 export default function Index() {
   return (
-    <>
+    <div style={{minHeight: "105vh"}}>
       <Header />
       <Spacer y={1}></Spacer>
       
@@ -44,16 +44,15 @@ export default function Index() {
       <Flex direction="row" marginLeft="200px" marginRight="200px"  padding="20px" justifyContent="space-between">
 
         <Box marginLeft="10%">
-          <Chart data={lineData} radius={130} thicknessP={20} text="Electricity"></Chart>
+          <Chart data={lineData} radius={120} thicknessP={20} text="Electricity"></Chart>
         </Box>
         <Box marginRight="10%">
-        <Chart data={barData} radius={130} thicknessP={20} text="Gas"></Chart>
+        <Chart data={barData} radius={120} thicknessP={20} text="Gas"></Chart>
 
         </Box>
       </Flex>
         </div>
-
       <Footer />
-    </>
+    </div >
   );
 }

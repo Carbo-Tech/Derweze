@@ -7,8 +7,8 @@ export default function Footer() {
 
   return (
     <div style={{ marginTop: "auto" }}>
-      <footer style={{ marginTop: "auto" }}>
-        <Navbar isBordered maxWidth="fluid" variant="sticky">
+      <footer style={{ marginTop: "auto", marginBottom:"0px",  bottom: "0px" }}>
+        <Navbar style={{marginBottom: "0px"}} isBordered maxWidth="fluid" variant="sticky">
           <Navbar.Brand>
 
             <span>

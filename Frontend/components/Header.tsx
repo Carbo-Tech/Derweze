@@ -13,8 +13,20 @@ export default function App() {
 
         </Navbar.Brand>
         <Navbar.Content />
-      
         <Navbar.Content>
+          <Navbar.Link color="inherit" href="/bills">
+            Bills
+          </Navbar.Link>
+          <Navbar.Link color="inherit" href="/contracts">
+            Contracts
+          </Navbar.Link>
+          <Navbar.Link color="inherit" href="/usage">
+            Usage
+          </Navbar.Link>
+          <Navbar.Link color="inherit" href="/home">
+            Home
+          </Navbar.Link>
+
           <Navbar.Link color="inherit" href="/login">
             Logout
           </Navbar.Link>
