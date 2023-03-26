@@ -26,11 +26,14 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import StepMailPassword from "../../components/signupSteps/StepMailPassword"
 
 import "../../components/phoneInput.module.scss";
+import StepData from "../../components/signupSteps/StepData";
 
 export default function Signup() {
   const [step, setStep] = useState("MailPasswd");
-  const [formData, setFormData] = React.useState({ birthday: null })
-
+  const [formData, setFormData] = React.useState({ birthday: "", email: "prova" })
+  const nextPage = (event: any, value: string) => {
+    setStep(value);
+  }
 
   function Signup() {
     fetch("/api/signup", {
@@ -62,13 +65,14 @@ export default function Signup() {
             width={80}
             height={80}
           />
-          <form onSubmit={(event) => {
-            event.preventDefault();
-          }}>
-            
-          <StepMailPassword formData={formData} setFormData={setFormData}></StepMailPassword>
 
-          </form>
+            {
+              step == "MailPasswd" ? (<StepMailPassword formData={formData} setFormData={setFormData} clickHandler={nextPage} spacing={1.5}></StepMailPassword>
+              ) :
+                step == "Data" ? (<StepData formData={formData} setFormData={setFormData} spacing={1.5} clickHandler={nextPage}></StepData>
+
+                ) : <></>
+            }
         </Card>
       </Container>
       <Footer />

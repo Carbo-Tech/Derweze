@@ -71,7 +71,99 @@ export function SignupSteps({ onSubmit }) {
         }
     }
 
+    function StepMailPasswd({  }: any) {
 
+
+        return (
+            <>
+                <Text
+                    size={24}
+                    weight="bold"
+                    css={{
+                        as: "center",
+                        mb: "20px",
+                    }}
+                >
+                    Derweze register
+                </Text>
+                <Input
+                    name="email"
+                    value={formData["email"]}
+                    onChange={(event) => { setFormData({ ...formData, email: event.target.value }); }}
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="lg"
+                    placeholder="Email"
+                    aria-label="Email"
+                />
+                <Spacer y={1} />
+                <Input.Password
+                    name="password"
+
+                    value={formData["password"]}
+                    onChange={(event) => { setFormData({ ...formData, password: event.target.value }); }}
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="lg"
+                    placeholder="Password"
+                    aria-label="Password"
+                />
+                <Spacer y={1} />
+
+                <Input.Password
+                    name="rpassword"
+
+                    value={formData["rpassword"]}
+                    onChange={(event) => { setFormData({ ...formData, rpassword: event.target.value });  }}
+                    clearable
+                    bordered
+                    fullWidth
+                    color="primary"
+                    size="lg"
+                    placeholder="Repeat password"
+                    aria-label="Repeat password"
+                />
+
+                <Spacer y={1} />
+                <PhoneInput
+                    aria-label="Phone input"
+
+                    inputStyle={{
+                        color: "black",
+                        height: "3em",
+                        borderRadius: "15px",
+                        width: "100%",
+                        borderWidth: "2px",
+                    }}
+
+
+                    dropdownStyle={{ transform: "translate(0%, -100%)" }}
+                    country={"it"}
+                    value={formData["phone"]}
+                    onChange={(phone) => setFormData({ ...formData, phone: phone })}
+                ></PhoneInput>
+
+                <Spacer y={1} />
+                <Grid.Container>
+                    <Grid xs={5}></Grid>
+                    <Grid xs={7}>
+                        <Button
+                            css={{
+                                width: "100%",
+                            }}
+                            onClick={(e) => { clickHandler(e, "Data");  }}
+                        >
+                            Next
+                        </Button>
+                    </Grid>
+                </Grid.Container>
+            </>
+        );
+    }
 
     function StepData({ }: any) {
         const [value, setValue] = useState(null);
@@ -359,7 +451,7 @@ export function SignupSteps({ onSubmit }) {
 
     return (
         <>
-            <StepMailPasswd></StepMailPasswd>
+            <GetContainer></GetContainer>
         </>
     )
 }
