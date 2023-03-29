@@ -15,7 +15,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@marketto/codice-fiscale-utils": "^2.1.1",
-    "@mui/material": "^5.11.12",
+    "@mui/material": "^5.11.15",
     "@mui/system": "^5.11.13",
     "@mui/x-date-pickers": "^6.0.2",
     "@next/font": "13.2.4",
