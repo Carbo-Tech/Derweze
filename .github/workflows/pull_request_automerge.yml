@@ -11,6 +11,10 @@ on:
       - ready_for_review
       - reopened
       - unlocked
+  check_suite:
+    types:
+      - completed
+  status: {}
 
 jobs:
   merge_dependabot:
@@ -25,6 +29,7 @@ jobs:
           MERGE_FILTER_AUTHOR: "dependabot"
           LOG: "TRACE"
           MERGE_METHOD: "squash"
+      - run: "echo ${{steps.automerge.outputs }}"
 
       - name: feedback
         if: steps.automerge.outputs.mergeResult == "merged"
