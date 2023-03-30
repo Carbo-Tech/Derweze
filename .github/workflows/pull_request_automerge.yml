@@ -12,15 +12,17 @@ on:
       - reopened
       - unlocked
   workflow_dispatch:
-
-env:
-  MANUAL_RUN: ${{ github.event_name == 'workflow_dispatch' }}
+    inputs:
+      manual_run:
+        description: 'Run the workflow for all pull requests'
+        default: false
+        required: false
 
 jobs:
   merge_dependabot:
     runs-on: ubuntu-latest
     if: >
-      ${{ env.MANUAL_RUN }} || (
+      ${{ github.event.inputs.manual_run == 'true' }} || (
         github.event_name == 'pull_request' &&
         github.event.action != 'closed' &&
         contains(github.event.pull_request.labels.*.name, 'dependencies') &&
