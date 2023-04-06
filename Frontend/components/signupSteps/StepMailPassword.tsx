@@ -1,37 +1,22 @@
 import {
-    Card,
     Spacer,
     Text,
-    Link,
     Input,
-    Image,
-    Row,
     Grid,
     Button,
-    Container,
-    PressEvent,
-    Dropdown,
-  } from "@nextui-org/react";
-  import * as CodiceFiscaleUtils from "@marketto/codice-fiscale-utils";
-  import PhoneInput from "react-phone-input-2";
-  import "react-phone-input-2/lib/material.css";
-  import Footer from "../../components/Footer";
-  import React, { useState } from "react";
-  import "dayjs/locale/it";
-  import Box from "@mui/material/Box";
-  import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-  import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-  import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-  
-  import "../../components/phoneInput.module.scss";
-  import StepData from "../../components/signupSteps/StepData";
+} from "@nextui-org/react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/material.css";
+import React, { useState } from "react";
+import "dayjs/locale/it";
+
+import "../../components/phoneInput.module.scss";
 export default function StepMailPassword({ formData, setFormData, spacing, clickHandler }: any) {
 
 
 
     return (
         <>
-            <Spacer y={spacing || 1.7} />
             <Text
                 size={24}
                 weight="bold"
@@ -43,7 +28,6 @@ export default function StepMailPassword({ formData, setFormData, spacing, click
             >
                 Derweze register
             </Text>
-            <Spacer y={spacing || 1.7} />
             <Input
                 labelPlaceholder="Email"
                 name="email"
@@ -57,7 +41,7 @@ export default function StepMailPassword({ formData, setFormData, spacing, click
                 placeholder="Email"
                 aria-label="Email"
             />
-            <Spacer y={spacing || 1.7} />
+            <Spacer y={spacing || 1.} />
             <Input.Password
                 name="password"
                 labelPlaceholder="Password"
@@ -100,6 +84,7 @@ export default function StepMailPassword({ formData, setFormData, spacing, click
                     width: "100%",
                     borderWidth: "2px",
                 }}
+                disableDropdown
 
 
                 dropdownStyle={{ transform: "translate(0%, -100%)" }}
