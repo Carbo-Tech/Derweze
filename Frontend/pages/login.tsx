@@ -13,7 +13,7 @@ import {
     Container,
 } from '@nextui-org/react';
 import { useRouter } from 'next/router';
-import Footer from '../components/Footer';
+import Footer from '../components/Footer/footer';
 import { useState } from 'react';
 
 export default function Login() {

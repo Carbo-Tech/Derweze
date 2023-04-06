@@ -3,7 +3,7 @@ import "chart.js/auto";
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import Header from '../../components/Header';
 import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
+import Footer from '../../components/Footer/footer';
 import Chart from './chart';
 import { Spacer } from '@nextui-org/react';
 import { borderRadius } from '@mui/system';

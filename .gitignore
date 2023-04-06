@@ -2,6 +2,7 @@
 .Frontend/node_modules
 Frontend/node_modules
 .\Frontend\node_modules 
+.Frontend/certs/*
 .MockAPI/app/__pycache__
 .Backend/app/__pycache__
 .idea
@@ -12,4 +13,4 @@ package-lock.json
 .yarn_cache
 yarn_cache
 .vscode/sftp.json
-
+Frontend/yarn.lock
