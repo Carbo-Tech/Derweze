@@ -11,4 +11,5 @@ package-lock.json
 *.pyc
 .yarn_cache
 yarn_cache
+.vscode/sftp.json
 
