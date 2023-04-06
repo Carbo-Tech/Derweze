@@ -1,22 +1,18 @@
-import {
-    Spacer,
-    Text,
-    Input,
-    Grid,
-    Button,
-} from "@nextui-org/react";
+import { Spacer, Text, Input, Grid, Button } from "@nextui-org/react";
 import "react-phone-input-2/lib/material.css";
 import React, { useState } from "react";
 import "dayjs/locale/it";
+import "../../components/phoneInput.module.scss";
 
-
-export default function StepAddress({ formData, setFormData, spacing, clickHandler }: any) {
+export default function StepAddress({ formData, setFormData, spacing, clickHandler, }: any) {
     return (
         <>
             <Text
                 size={24}
                 weight="bold"
                 css={{
+                    textAlign: "center",
+
                     as: "center",
                     mb: "20px",
                 }}
@@ -24,14 +20,15 @@ export default function StepAddress({ formData, setFormData, spacing, clickHandl
                 Derweze address
             </Text>
             <Grid.Container>
-
                 <Grid xs={6}>
                     <Input
                         clearable
                         bordered
                         name="Nation"
                         value={formData["nation"]}
-                        onChange={(event) => { setFormData({ ...formData, nation: event.target.value }) }}
+                        onChange={(event) => {
+                            setFormData({ ...formData, nation: event.target.value });
+                        }}
                         fullWidth
                         color="primary"
                         size="lg"
@@ -46,7 +43,9 @@ export default function StepAddress({ formData, setFormData, spacing, clickHandl
                         bordered
                         name="province"
                         value={formData["province"]}
-                        onChange={(event) => { setFormData({ ...formData, province: event.target.value }) }}
+                        onChange={(event) => {
+                            setFormData({ ...formData, province: event.target.value });
+                        }}
                         fullWidth
                         color="primary"
                         size="lg"
@@ -65,7 +64,9 @@ export default function StepAddress({ formData, setFormData, spacing, clickHandl
                         bordered
                         name="city"
                         value={formData["city"]}
-                        onChange={(event) => { setFormData({ ...formData, city: event.target.value }) }}
+                        onChange={(event) => {
+                            setFormData({ ...formData, city: event.target.value });
+                        }}
                         fullWidth
                         color="primary"
                         size="lg"
@@ -81,7 +82,9 @@ export default function StepAddress({ formData, setFormData, spacing, clickHandl
                         name="zipCode"
                         type="number"
                         value={formData["zipCode"]}
-                        onChange={(event) => { setFormData({ ...formData, zipCode: event.target.value }) }}
+                        onChange={(event) => {
+                            setFormData({ ...formData, zipCode: event.target.value });
+                        }}
                         fullWidth
                         color="primary"
                         size="lg"
@@ -100,7 +103,9 @@ export default function StepAddress({ formData, setFormData, spacing, clickHandl
                         bordered
                         name="street"
                         value={formData["street"]}
-                        onChange={(event) => { setFormData({ ...formData, street: event.target.value }) }}
+                        onChange={(event) => {
+                            setFormData({ ...formData, street: event.target.value });
+                        }}
                         fullWidth
                         color="primary"
                         size="lg"
@@ -114,10 +119,11 @@ export default function StepAddress({ formData, setFormData, spacing, clickHandl
                         clearable
                         bordered
                         fullWidth
-
                         name="streetNumber"
                         value={formData["streetNumber"]}
-                        onChange={(event) => { setFormData({ ...formData, streetNumber: event.target.value }) }}
+                        onChange={(event) => {
+                            setFormData({ ...formData, streetNumber: event.target.value });
+                        }}
                         color="primary"
                         size="lg"
                         placeholder="N."
@@ -129,7 +135,12 @@ export default function StepAddress({ formData, setFormData, spacing, clickHandl
 
             <Grid.Container>
                 <Grid xs={3}>
-                    <Button auto onClick={(e) => { clickHandler(e, "Data"); }}>
+                    <Button
+                        auto
+                        onClick={(e) => {
+                            clickHandler(e, "Data");
+                        }}
+                    >
                         &lt;
                     </Button>
                 </Grid>
@@ -139,7 +150,6 @@ export default function StepAddress({ formData, setFormData, spacing, clickHandl
                         css={{
                             width: "100%",
                         }}
-
                     >
                         Complete
                     </Button>

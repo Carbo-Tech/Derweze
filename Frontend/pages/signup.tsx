@@ -9,7 +9,6 @@ import React, { useState } from "react";
 import "dayjs/locale/it";
 import StepMailPassword from "../components/signupSteps/StepMailPassword"
 
-import "../../components/phoneInput.module.scss";
 import StepData from "../components/signupSteps/StepData";
 import StepAddress from "../components/signupSteps/StepAddress";
 
