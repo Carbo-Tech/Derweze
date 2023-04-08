@@ -14,3 +14,5 @@ package-lock.json
 yarn_cache
 .vscode/sftp.json
 Frontend/yarn.lock
+Frontend/certs/
+

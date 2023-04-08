@@ -1,7 +1,7 @@
 # Dockerfile
 
 # Use node alpine as it's a small node image
-FROM node:19-alpine3.16
+FROM node:current-alpine
 ENV YARN_CACHE_FOLDER /yarn
 RUN mkdir -p $YARN_CACHE_FOLDER
 

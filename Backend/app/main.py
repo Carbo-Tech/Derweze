@@ -21,7 +21,6 @@ class User(BaseModel):
     """
     email: str
     password: str
-    
 
 
 class Registry(BaseModel):
@@ -41,7 +40,25 @@ class Registry(BaseModel):
     city: str
     province: str
     nation: str
-    
+
+
+def fetchall(cursor):
+    columns = [column[0] for column in cursor.description]
+    ret = []
+    all = cursor.fetchall()
+    if not all:
+        return None
+    for row in all:
+        ret.append(dict(zip(columns, row)))
+    return ret
+
+
+def fetchone(cursor):
+    one = cursor.fetchone()
+    if not one:
+        return None
+    columns = [column[0] for column in cursor.description]
+    return dict(zip(columns, one))
 
 
 def get_conn() -> MySQLConnection:
@@ -74,6 +91,7 @@ def add_user(conn: MySQLConnection, user: User) -> None:
         cursor.close()
     else:
         raise registry_error_exception
+
 
 def add_registry(conn: MySQLConnection, registry: Registry) -> None:
     """
@@ -124,10 +142,14 @@ def get_salt_by_email(conn: MySQLConnection, email: str) -> Optional[str]:
     cursor = conn.cursor()
     select_query = 'SELECT salt FROM user WHERE email = %s'
     cursor.execute(select_query, (email,))
-    result = cursor.fetchone()
+    result = fetchone(cursor)
     cursor.close()
     if result is not None:
         return result["salt"]
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Incorrect email or password"
+    )
 
 
 def get_user_by_email(conn: MySQLConnection, email: str) -> Optional[User]:
@@ -137,11 +159,14 @@ def get_user_by_email(conn: MySQLConnection, email: str) -> Optional[User]:
     cursor = conn.cursor()
     select_query = 'SELECT * FROM user WHERE email = %s'
     cursor.execute(select_query, (email,))
-    result = cursor.fetchone()
+    result = fetchone(cursor)
     cursor.close()
     if result is not None:
-        return User(email=result["email"],salt=result["salt"], password=result["password"])
-
+        return User(email=result["email"], salt=result["salt"], password=result["password"])
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Incorrect email or password"
+    )
 
 
 def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] = None) -> bytes:
@@ -214,9 +239,9 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
     # Hash the password using the SHA2 function
     password = user.password.encode()
     cursor = conn.cursor()
-    
-    
-    cursor.execute("SELECT SHA2(CONCAT(%s,CONCAT(%s,%s)),256)", (user.email,get_salt_by_email(user.email),password))
+
+    cursor.execute("SELECT SHA2(CONCAT(%s,CONCAT(%s,%s)),256)",
+                   (user.email, get_salt_by_email(conn, user.email), password))
     hashed_password = cursor.fetchone()[0]
     cursor.close()
 
@@ -241,16 +266,11 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
 @app.post("/getUserData")
 async def get_user_data(user: User, conn: MySQLConnection = Depends(get_conn)):
 
-    
     cursor = conn.cursor()
     query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s AND password=SHA2(CONCAT(%s,CONCAT(salt,%s)), 256))"""
 
-    
-    cursor.execute(query,(user.email,user.email,user.password))
+    cursor.execute(query, (user.email, user.email, user.password))
     return str(cursor.fetchall())
-    
-    
-    
 
 
 @app.post("/signup")
