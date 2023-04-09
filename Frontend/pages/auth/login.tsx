@@ -39,7 +39,8 @@ export default function Login() {
 
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault()
-        const res = await signIn("credentials", { email: formData["email"], password: formData["password"], redirect: false })
+        const res = await signIn("credentials", { email: formData["email"], password: formData["password"], redirect: true,callbackUrl:"/user" })
+        
         console.log(res)
     }
 

@@ -30,8 +30,9 @@ class Registry(BaseModel):
     name: str = None
     surname: str = None
     business_name: str
-    vat_number: str = None
     telephone_number: str = None
+    vat_number: str = None
+    is_admin: str = "0"
     social_security_number: str = None
     address: str= None
     civic_number: int= None

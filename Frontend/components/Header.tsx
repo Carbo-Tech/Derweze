@@ -1,5 +1,6 @@
 import React from "react";
 import { Navbar, Button, Link, Text, Card, Radio, Avatar } from "@nextui-org/react";
+import { signOut } from "next-auth/react";
 
 export default function App() {
   const [variant, setVariant] = React.useState("static");
@@ -27,9 +28,9 @@ export default function App() {
             Home
           </Navbar.Link>
 
-          <Navbar.Link color="inherit" href="/login">
+          <Navbar.Item onClick={signOut}>
             Logout
-          </Navbar.Link>
+          </Navbar.Item>
           <Navbar.Item>
           <Avatar 
           squared 

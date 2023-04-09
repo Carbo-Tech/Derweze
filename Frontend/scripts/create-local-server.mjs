@@ -4,9 +4,10 @@ import fs from 'fs';
 import chalk from 'chalk';
 
 const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev });
-const handle = app.getRequestHandler();
 const PORT = process.env.PORT || 3000;
+const hostname="localhost"
+const app = next({ dev, hostname , port:PORT });
+const handle = app.getRequestHandler();
 
 if (!fs.existsSync('./certs/.capath')) {
   const macOsCommand = chalk.greenBright('sudo yarn ssl:setup');

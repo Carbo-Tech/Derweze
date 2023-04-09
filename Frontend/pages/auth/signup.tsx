@@ -4,13 +4,13 @@ import {
   Container,
 } from "@nextui-org/react";
 import "react-phone-input-2/lib/material.css";
-import Footer from "../components/Footer/footer";
+import Footer from "../../components/Footer/footer";
 import React, { useState } from "react";
 import "dayjs/locale/it";
-import StepMailPassword from "../components/signupSteps/StepMailPassword"
+import StepMailPassword from "../../components/signupSteps/StepMailPassword"
 
-import StepData from "../components/signupSteps/StepData";
-import StepAddress from "../components/signupSteps/StepAddress";
+import StepData from "../../components/signupSteps/StepData";
+import StepAddress from "../../components/signupSteps/StepAddress";
 
 export default function Signup() {
   const [step, setStep] = useState("MailPasswd");
