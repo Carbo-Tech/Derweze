@@ -2,7 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth from "next-auth";
 import type { NextAuthOptions } from "next-auth";
 import { User } from "next-auth";
-
+import { getUserData } from "../../../functions/getUserData";
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
@@ -27,14 +27,32 @@ export const authOptions: NextAuthOptions = {
             password,
           }),
         });
+        const token = await res.json();
+        console.log(token)
+        const userData = await fetch("http://backend:443/getUserDataToken/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            access_token: token["access_token"],
+          }),
+        });
 
-        const user = await res.json();
+        const registry = await userData.json();
 
+
+        const user = {
+          ...token,
+          ...registry,
+        };
         console.log({ user });
 
         if (res.ok && user) {
           return user;
-        } else return null;
+        } else {
+          throw new Error("Invalid credentials");
+        }
       },
     }),
   ],
@@ -55,11 +73,9 @@ export const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    signIn: '/auth/login',
-    newUser: '/signup'
-  }
-
-
+    signIn: "/auth/login",
+    newUser: "/signup",
+  },
 };
 
 export default NextAuth(authOptions);
