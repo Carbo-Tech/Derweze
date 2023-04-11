@@ -1,5 +1,4 @@
 import { signOut, useSession } from 'next-auth/react'
-import { authOptions } from "../../pages/api/auth/[...nextauth]";
 
 export default function IndexPage() {
   const session = useSession()
