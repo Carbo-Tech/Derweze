@@ -11,7 +11,7 @@
     "predevssl": "node scripts/create-ssl-certs.js"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.5.2",
+    "@chakra-ui/react": "^2.5.5",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@marketto/codice-fiscale-utils": "^2.1.1",
