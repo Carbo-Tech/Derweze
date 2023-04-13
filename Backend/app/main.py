@@ -38,6 +38,56 @@ async def login(user: User) -> Dict[str, str]:
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+@app.post("/signup")
+async def signup(user: User, registry: Registry):
+    """
+    Endpoint to create a new user and registry.
+
+    Parameters:
+    user (User): A user object containing email and password.
+    registry (Registry): A registry object containing registry data for the user.
+
+    Returns:
+    A dictionary containing the access token for the new user.
+
+    Raises:
+    HTTPException: If a user with the same email already exists.
+    """
+    if get_user_by_email(user.email) is not None:
+        raise HTTPException(
+            status_code=400, detail="User with this email already exists")
+
+    add_registry(registry)
+    add_user(user)
+
+    # Return access token for the new user
+    access_token = create_access_token(user.email)
+    return {"access_token": access_token}
+
+
+@app.post("/updateJWT")
+async def update_JWT(token: Dict[str, str]) ->  Dict[str, str]:
+    """
+    Endpoint to get an updated toker for a user.
+
+    Parameters:
+    token (Dict[str,str]): A dictionary containing the access token.
+
+    Returns:
+    A dictionary containing the updated access token.
+
+    Raises:
+    HTTPException: If registry data is not found.
+    """
+    current_user: User = get_current_user(token)
+
+    
+
+
+
+
+
+
 @app.post("/getUserData")
 async def get_user_data(token: Dict[str, str]) -> Registry:
     """
@@ -86,35 +136,8 @@ async def get_user_contracts(token: Dict[str, str]) -> list[int]:
 
     # Se non sono stati trovati contratti, solleva un'eccezione
     if contracts is None:
-        raise HTTPException(status_code=500, detail="Dati contratto non trovati")
+        raise HTTPException(
+            status_code=500, detail="Dati contratto non trovati")
 
     # Restituisce l'elenco di identificatori dei contratti
     return contracts
-
-
-
-@app.post("/signup")
-async def signup(user: User, registry: Registry):
-    """
-    Endpoint to create a new user and registry.
-
-    Parameters:
-    user (User): A user object containing email and password.
-    registry (Registry): A registry object containing registry data for the user.
-
-    Returns:
-    A dictionary containing the access token for the new user.
-
-    Raises:
-    HTTPException: If a user with the same email already exists.
-    """
-    if get_user_by_email(user.email) is not None:
-        raise HTTPException(
-            status_code=400, detail="User with this email already exists")
-
-    add_registry(registry)
-    add_user(user)
-
-    # Return access token for the new user
-    access_token = create_access_token(user.email)
-    return {"access_token": access_token}
