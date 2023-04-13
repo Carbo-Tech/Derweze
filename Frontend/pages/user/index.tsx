@@ -1,5 +1,5 @@
 import { signOut, useSession } from 'next-auth/react'
-import Header  from '../components/Header'
+
 export default function IndexPage() {
   const session = useSession()
   console.log(session)
@@ -7,7 +7,6 @@ export default function IndexPage() {
 
   return (
     <div>
-<Header></Header>
       <h1>Welcome to my app</h1>
       {session ? (
         <div>

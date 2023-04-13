@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Dict, Optional, Tuple
 import datetime
 import jwt
 from fastapi import FastAPI, HTTPException, Depends, status
@@ -21,7 +21,6 @@ class User(BaseModel):
     """
     email: str
     password: str
-    
 
 
 class Registry(BaseModel):
@@ -31,17 +30,35 @@ class Registry(BaseModel):
     name: str = None
     surname: str = None
     business_name: str
-    vat_number: str = None
     telephone_number: str = None
+    vat_number: str = None
+    is_admin: str = "0"
     social_security_number: str = None
-    is_admin: int = 0
-    address: str
-    civic_number: int
-    cap: str
-    city: str
-    province: str
-    nation: str
-    
+    address: str= None
+    civic_number: int= None
+    cap: str= None
+    city: str= None
+    province: str= None
+    nation: str= None
+
+
+def fetchall(cursor):
+    columns = [column[0] for column in cursor.description]
+    ret = []
+    all = cursor.fetchall()
+    if not all:
+        return None
+    for row in all:
+        ret.append(dict(zip(columns, row)))
+    return ret
+
+
+def fetchone(cursor):
+    one = cursor.fetchone()
+    if not one:
+        return None
+    columns = [column[0] for column in cursor.description]
+    return dict(zip(columns, one))
 
 
 def get_conn() -> MySQLConnection:
@@ -55,6 +72,41 @@ def get_conn() -> MySQLConnection:
         database='derweze'
     )
     return conn
+
+
+def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token non valido",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except jwt.exceptions.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token scaduto",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except jwt.exceptions.DecodeError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token non valido",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    user: User = get_user_by_email(email=email)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token non valido",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return user
 
 
 def add_user(conn: MySQLConnection, user: User) -> None:
@@ -74,6 +126,7 @@ def add_user(conn: MySQLConnection, user: User) -> None:
         cursor.close()
     else:
         raise registry_error_exception
+
 
 def add_registry(conn: MySQLConnection, registry: Registry) -> None:
     """
@@ -124,24 +177,31 @@ def get_salt_by_email(conn: MySQLConnection, email: str) -> Optional[str]:
     cursor = conn.cursor()
     select_query = 'SELECT salt FROM user WHERE email = %s'
     cursor.execute(select_query, (email,))
-    result = cursor.fetchone()
+    result = fetchone(cursor)
     cursor.close()
     if result is not None:
         return result["salt"]
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Incorrect email or password"
+    )
 
 
-def get_user_by_email(conn: MySQLConnection, email: str) -> Optional[User]:
+def get_user_by_email(email: str,conn: MySQLConnection = get_conn()) -> Optional[User]:
     """
     Returns the user with the given email address
     """
     cursor = conn.cursor()
-    select_query = 'SELECT * FROM user WHERE email = %s'
+    select_query = 'SELECT * FROM user WHERE email = %s;'
     cursor.execute(select_query, (email,))
-    result = cursor.fetchone()
+    result = fetchone(cursor)
     cursor.close()
     if result is not None:
-        return User(email=result["email"],salt=result["salt"], password=result["password"])
-
+        return User(email=result["email"], salt=result["salt"], password=result["password"])
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Incorrect email or password"
+    )
 
 
 def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] = None) -> bytes:
@@ -165,34 +225,7 @@ def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] 
     return encoded_jwt
 
 
-def get_current_user(conn: MySQLConnection, token: str = Depends(oauth2_scheme)) -> Tuple:
-    """
-    Returns the current user based on the given token
-    """
-    # Raise an exception if the credentials are invalid
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
 
-    # Decode the JSON Web Token
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except jwt.PyJWTError:
-        raise credentials_exception
-
-    # Get the email from the payload
-    email: str = payload.get("sub")
-    if email is None:
-        raise credentials_exception
-
-    # Get the user information from the database
-    token_data = get_user_by_email(conn, email)
-    if token_data is None:
-        raise credentials_exception
-
-    return token_data
 
 
 @app.post("/login")
@@ -203,7 +236,7 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
     It returns a JSON response containing the access token and token type.
     """
     # Check if the user exists in the database
-    db_user = get_user_by_email(conn, user.email)
+    db_user = get_user_by_email(conn=conn,email= user.email)
     if not db_user:
         # Raise an exception if the user is not found
         raise HTTPException(
@@ -214,9 +247,9 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
     # Hash the password using the SHA2 function
     password = user.password.encode()
     cursor = conn.cursor()
-    
-    
-    cursor.execute("SELECT SHA2(CONCAT(%s,CONCAT(%s,%s)),256)", (user.email,get_salt_by_email(user.email),password))
+
+    cursor.execute("SELECT SHA2(CONCAT(%s,CONCAT(%s,%s)),256);",
+                   (user.email, get_salt_by_email(conn, user.email), password))
     hashed_password = cursor.fetchone()[0]
     cursor.close()
 
@@ -241,22 +274,60 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
 @app.post("/getUserData")
 async def get_user_data(user: User, conn: MySQLConnection = Depends(get_conn)):
 
+    cursor = conn.cursor()
+    query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s AND password=SHA2(CONCAT(%s,CONCAT(salt,%s)), 256));"""
+
+    cursor.execute(query, (user.email, user.email, user.password))
+    return str(cursor.fetchall())
+
+
+def get_registry_by_user(user: User,conn: MySQLConnection = Depends(get_conn)) -> Optional[Registry]:
+    """
+    Returns the registry with the given id
+    """
     
     cursor = conn.cursor()
-    query = """SELECT * FROM registry WHERE id=(SELECT id FROM user WHERE email=%s AND password=SHA2(CONCAT(%s,CONCAT(salt,%s)), 256))"""
+    select_query = """
+    SELECT * FROM registry 
+    WHERE id=(SELECT id FROM user WHERE email=%(email)s AND password=%(password)s);
+    """
+    cursor.execute(
+        select_query, {'email': user.email, 'password': user.password})
+    print(cursor.statement)
+    result = fetchone(cursor=cursor)
+    print(result)
+    if result:
+        registry = Registry(**result)
+        return registry
+    return None
+    
+    
+@app.post("/getUserDataToken")
+async def get_user_dataT(token: Dict[str, str],conn: MySQLConnection = Depends(get_conn)) -> Registry:
+    """
+    Endpoint to get registry data for a user.
+    Parameters:
+    token (Dict[str,str]): A dictionary containing the access token.
+    Returns:
+    A Registry object containing the registry data for the user.
+    Raises:
+    HTTPException: If registry data is not found.
+    """
+    current_user: User = get_current_user(token=token.get("access_token"))
 
-    
-    cursor.execute(query,(user.email,user.email,user.password))
-    return str(cursor.fetchall())
-    
-    
-    
+    # Get registry data for the user
+    registry: Registry = get_registry_by_user(current_user,conn=conn)
 
+    if not registry:
+        raise HTTPException(status_code=500, detail="Registry data not found")
+
+    # Return registry data
+    return registry
 
 @app.post("/signup")
 async def signup(user: User, registry: Registry, conn: MySQLConnection = Depends(get_conn)):
     # Check if email already exists in the database
-    db_user = get_user_by_email(conn, user.email)
+    db_user = get_user_by_email(conn=conn, email=user.email)
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
