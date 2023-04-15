@@ -1,7 +1,7 @@
 import "chart.js/auto";
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 
-export default function Chart({ thicknessP, radius, data, text }) {
+export default function Chart({ thicknessP, radius, data, text }:any) {
     const thickness = {
         id: "thickness",
         beforeDraw: function (chart, options) {

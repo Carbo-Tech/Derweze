@@ -29,6 +29,8 @@ export default function StepData({ formData, setFormData, spacing, clickHandler 
         size={24}
         weight="bold"
         css={{
+          textAlign: "center",
+
           as: "center",
           mb: "20px",
         }}

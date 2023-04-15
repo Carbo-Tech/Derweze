@@ -44,7 +44,7 @@ export default function Signup() {
       >
         <Card css={{ mw: "40%", p: "40px" }}>
           <Image
-            src="logo_derweze.png"
+            src="/logo_derweze.png"
             alt="Default Image"
             width={80}
             height={80}

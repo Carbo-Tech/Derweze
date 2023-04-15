@@ -5,7 +5,7 @@ import Eula from "./eula";
 
 export default function Footer() {
   return (<>
-    <Navbar isBordered maxWidth="fluid" variant="static">
+    <Navbar isBordered maxWidth="fluid" variant="static" >
       <Navbar.Brand>
 
         <span>

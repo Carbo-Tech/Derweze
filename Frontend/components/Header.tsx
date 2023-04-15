@@ -10,9 +10,9 @@ console.log(session)
   const variants = ["static", "floating", "sticky"];
 
   return (
-    <Navbar maxWidth="fluid" isBordered variant={variant}>
+    <Navbar maxWidth="fluid" isBordered variant={variant} style={{height:"10vh"}}>
       <Navbar.Brand>
-        <Image src="logo_derweze.png" height="50px" />
+        <Image src="/logo_derweze.png" height="50px" />
 
       </Navbar.Brand>
       <Navbar.Content />
@@ -35,8 +35,10 @@ console.log(session)
         </Navbar.Link>
 
         {session.status=="authenticated" ? (<>
-          <Navbar.Item onClick={signOut}>
+          <Navbar.Item >
+            <Button onPress={signOut} bordered color="error" size={"xs"}>
             Logout
+            </Button>
           </Navbar.Item>
           <Navbar.Item>
           <Avatar
