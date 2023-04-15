@@ -1,11 +1,12 @@
-from typing import Dict, Optional, Tuple
 import datetime
+from typing import Dict, List, Optional, Tuple
+
 import jwt
-from fastapi import FastAPI, HTTPException, Depends, status
-from fastapi.security import OAuth2PasswordBearer
-from pydantic import BaseModel
 import mysql.connector
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 from mysql.connector.connection import MySQLConnection
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -34,12 +35,43 @@ class Registry(BaseModel):
     vat_number: str = None
     is_admin: str = "0"
     social_security_number: str = None
-    address: str= None
-    civic_number: int= None
-    cap: str= None
-    city: str= None
-    province: str= None
-    nation: str= None
+    address: str = None
+    civic_number: int = None
+    cap: str = None
+    city: str = None
+    province: str = None
+    nation: str = None
+
+
+class Contract(BaseModel):
+    """
+    Registry model with properties for a business registry.
+    """
+    idContract:str=None
+    idDomicile:str=None
+    service_request_date:datetime.datetime=None
+    validity_start_date:datetime.datetime=None
+    validity_end_date:datetime.datetime=None
+    offert_description:str=None
+    utility:str=None
+    contract_status:str=None
+    payment_type:str=None
+    taxable_power:str=None
+    available_power:str=None
+    annual_energy:str=None
+    annual_gas:str=None
+    use_cooking_foods:str=None
+    production_hot_sanitary_water:str=None
+    individual_heating:str=None
+    commercial_use:str=None
+    description:str=None
+    address:str=None
+    civicNumber:str=None
+    zipCode:str=None
+    locality:str=None
+    province:str=None
+    nation:str=None
+    permission:str=None
 
 
 def fetchall(cursor):
@@ -187,7 +219,7 @@ def get_salt_by_email(conn: MySQLConnection, email: str) -> Optional[str]:
     )
 
 
-def get_user_by_email(email: str,conn: MySQLConnection = get_conn()) -> Optional[User]:
+def get_user_by_email(email: str, conn: MySQLConnection = get_conn()) -> Optional[User]:
     """
     Returns the user with the given email address
     """
@@ -225,7 +257,58 @@ def create_access_token(data: dict, expires_delta: Optional[datetime.timedelta] 
     return encoded_jwt
 
 
+def get_registry_by_user(user: User, conn: MySQLConnection = Depends(get_conn)) -> Optional[Registry]:
+    """
+    Returns the registry with the given id
+    """
 
+    cursor = conn.cursor()
+    select_query = """
+    SELECT * FROM registry 
+    WHERE id=(SELECT id FROM user WHERE email=%(email)s AND password=%(password)s);
+    """
+    cursor.execute(
+        select_query, {'email': user.email, 'password': user.password})
+    print(cursor.statement)
+    result = fetchone(cursor=cursor)
+    print(result)
+    if result:
+        registry = Registry(**result)
+        return registry
+    return None
+
+
+def get_contracts_by_user(user: User, conn: MySQLConnection = Depends(get_conn)) -> Optional[Registry]:
+    """
+    Returns the registry with the given id
+    """
+
+    cursor = conn.cursor()
+    select_query = """
+    SELECT contract_domicile_v.*, permissions.permission 
+    FROM  contract_domicile_v 
+    JOIN permissions
+    ON permissions.idContract=contract_domicile_v.idContract 
+    WHERE permissions.idRegistry IN (
+
+        
+            SELECT user_registry_v.id 
+            FROM user_registry_v
+            WHERE user_registry_v.email=%(email)s
+            
+        
+        );
+    """
+    cursor.execute(
+        select_query, {'email': user.email})
+    result = fetchall(cursor=cursor)
+    print(result)
+    contracts=list()
+    if result:
+        for i in result:
+            contracts.append(Contract(**i))
+        return contracts
+    return None
 
 
 @app.post("/login")
@@ -236,7 +319,7 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
     It returns a JSON response containing the access token and token type.
     """
     # Check if the user exists in the database
-    db_user = get_user_by_email(conn=conn,email= user.email)
+    db_user = get_user_by_email(conn=conn, email=user.email)
     if not db_user:
         # Raise an exception if the user is not found
         raise HTTPException(
@@ -262,7 +345,7 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
         )
 
     # Create an access token for the user
-    access_token = create_access_token({"sub": user.email})
+    access_token = create_access_token({"sub": user.email},datetime.timedelta(hours=5))#😑😑
 
     # Close the database connection
     conn.close()
@@ -281,29 +364,8 @@ async def get_user_data(user: User, conn: MySQLConnection = Depends(get_conn)):
     return str(cursor.fetchall())
 
 
-def get_registry_by_user(user: User,conn: MySQLConnection = Depends(get_conn)) -> Optional[Registry]:
-    """
-    Returns the registry with the given id
-    """
-    
-    cursor = conn.cursor()
-    select_query = """
-    SELECT * FROM registry 
-    WHERE id=(SELECT id FROM user WHERE email=%(email)s AND password=%(password)s);
-    """
-    cursor.execute(
-        select_query, {'email': user.email, 'password': user.password})
-    print(cursor.statement)
-    result = fetchone(cursor=cursor)
-    print(result)
-    if result:
-        registry = Registry(**result)
-        return registry
-    return None
-    
-    
 @app.post("/getUserDataToken")
-async def get_user_dataT(token: Dict[str, str],conn: MySQLConnection = Depends(get_conn)) -> Registry:
+async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
     """
     Endpoint to get registry data for a user.
     Parameters:
@@ -316,13 +378,29 @@ async def get_user_dataT(token: Dict[str, str],conn: MySQLConnection = Depends(g
     current_user: User = get_current_user(token=token.get("access_token"))
 
     # Get registry data for the user
-    registry: Registry = get_registry_by_user(current_user,conn=conn)
+    registry: Registry = get_registry_by_user(current_user, conn=conn)
 
     if not registry:
         raise HTTPException(status_code=500, detail="Registry data not found")
 
     # Return registry data
     return registry
+
+
+@app.post("/getContractsUser")
+async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
+
+    current_user: User = get_current_user(token=token.get("access_token"))
+
+    # Get registry data for the user
+    contracts: List[Contract] = get_contracts_by_user(current_user, conn=conn)
+
+    if not contracts:
+        raise HTTPException(status_code=500, detail="Registry data not found")
+
+    # Return registry data
+    return contracts
+
 
 @app.post("/signup")
 async def signup(user: User, registry: Registry, conn: MySQLConnection = Depends(get_conn)):
