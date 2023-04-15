@@ -57,41 +57,6 @@ INSERT INTO `contract` VALUES (1,1,'2010-12-21 00:00:00.000','2011-02-01 00:00:0
 UNLOCK TABLES;
 
 --
--- Temporary view structure for view `contract_domicile_v`
---
-
-DROP TABLE IF EXISTS `contract_domicile_v`;
-/*!50001 DROP VIEW IF EXISTS `contract_domicile_v`*/;
-SET @saved_cs_client     = @@character_set_client;
-/*!50503 SET character_set_client = utf8mb4 */;
-/*!50001 CREATE VIEW `contract_domicile_v` AS SELECT 
- 1 AS `idContract`,
- 1 AS `idDomicile`,
- 1 AS `service_request_date`,
- 1 AS `validity_start_date`,
- 1 AS `validity_end_date`,
- 1 AS `offert_description`,
- 1 AS `utility`,
- 1 AS `contract_status`,
- 1 AS `payment_type`,
- 1 AS `taxable_power`,
- 1 AS `available_power`,
- 1 AS `annual_energy`,
- 1 AS `annual_gas`,
- 1 AS `use_cooking_foods`,
- 1 AS `production_hot_sanitary_water`,
- 1 AS `individual_heating`,
- 1 AS `commercial_use`,
- 1 AS `description`,
- 1 AS `address`,
- 1 AS `civicNumber`,
- 1 AS `zipCode`,
- 1 AS `locality`,
- 1 AS `province`,
- 1 AS `nation`*/;
-SET character_set_client = @saved_cs_client;
-
---
 -- Table structure for table `domicile`
 --
 
@@ -145,7 +110,7 @@ CREATE TABLE `permissions` (
 
 LOCK TABLES `permissions` WRITE;
 /*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
-INSERT INTO `permissions` VALUES (1,1,'E'),(2,2,'E'),(3,3,'E'),(4,4,'E'),(5,5,'E'),(5,6,'E'),(6,7,'E'),(7,8,'E'),(8,9,'E'),(8,10,'E'),(9,11,'E'),(9,12,'E'),(10,13,'E'),(10,14,'E'),(9,14,'V');
+INSERT INTO `permissions` VALUES (1,1,'E'),(2,2,'E'),(3,3,'E'),(4,4,'E'),(5,5,'E'),(5,6,'E'),(6,7,'E'),(7,8,'E'),(8,9,'E'),(8,10,'E'),(9,11,'E'),(9,12,'E'),(10,13,'E'),(10,14,'E');
 /*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,24 +195,6 @@ DELIMITER ;
 --
 -- Dumping routines for database 'derweze'
 --
-
---
--- Final view structure for view `contract_domicile_v`
---
-
-/*!50001 DROP VIEW IF EXISTS `contract_domicile_v`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = latin1 */;
-/*!50001 SET character_set_results     = latin1 */;
-/*!50001 SET collation_connection      = latin1_swedish_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `contract_domicile_v` AS select `contract`.`id` AS `idContract`,`contract`.`idDomicile` AS `idDomicile`,`contract`.`service_request_date` AS `service_request_date`,`contract`.`validity_start_date` AS `validity_start_date`,`contract`.`validity_end_date` AS `validity_end_date`,`contract`.`offert_description` AS `offert_description`,`contract`.`utility` AS `utility`,`contract`.`contract_status` AS `contract_status`,`contract`.`payment_type` AS `payment_type`,`contract`.`taxable_power` AS `taxable_power`,`contract`.`available_power` AS `available_power`,`contract`.`annual_energy` AS `annual_energy`,`contract`.`annual_gas` AS `annual_gas`,`contract`.`use_cooking_foods` AS `use_cooking_foods`,`contract`.`production_hot_sanitary_water` AS `production_hot_sanitary_water`,`contract`.`individual_heating` AS `individual_heating`,`contract`.`commercial_use` AS `commercial_use`,`domicile`.`description` AS `description`,`domicile`.`address` AS `address`,`domicile`.`civicNumber` AS `civicNumber`,`domicile`.`zipCode` AS `zipCode`,`domicile`.`locality` AS `locality`,`domicile`.`province` AS `province`,`domicile`.`nation` AS `nation` from (`contract` join `domicile` on((`domicile`.`id` = `contract`.`idDomicile`))) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -258,4 +205,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-15 14:50:10
+-- Dump completed on 2023-04-15 14:05:23

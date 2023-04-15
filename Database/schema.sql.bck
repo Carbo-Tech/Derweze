@@ -42,8 +42,8 @@ CREATE TABLE `contract` (
   `commercial_use` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_contract_idDomicile` (`idDomicile`),
-  CONSTRAINT `fk_contract_idDomicile` FOREIGN KEY (`idDomicile`) REFERENCES `domicile` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `fk_contract_idDomicile` FOREIGN KEY (`idDomicile`) REFERENCES `domicile` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,44 +52,8 @@ CREATE TABLE `contract` (
 
 LOCK TABLES `contract` WRITE;
 /*!40000 ALTER TABLE `contract` DISABLE KEYS */;
-INSERT INTO `contract` VALUES (1,1,'2010-12-21 00:00:00.000','2011-02-01 00:00:00.000','2050-12-31 23:59:59.000','Easy Energy','EE','Attivo','Bonifico',3.3,3,5408,NULL,NULL,NULL,NULL,NULL),(2,2,'2012-09-24 00:00:00.000','2012-10-01 00:00:00.000','2050-12-31 23:59:59.000','Easy Energy','EE','Attivo','Carta di credito',3.3,3,4862,NULL,NULL,NULL,NULL,NULL),(3,3,'2012-09-24 00:00:00.000','2015-04-01 00:00:00.000','2050-12-31 23:59:59.000','Easy Energy','EE/GAS','Attivo','Bonifico',3.3,3,4596,1073,1,1,1,0),(4,4,'2010-12-14 00:00:00.000','2011-02-01 00:00:00.000','2050-12-31 23:59:59.000','Family','GAS','Attivo','Bonifico',NULL,NULL,NULL,1045,1,1,1,0),(5,5,'2012-01-31 00:00:00.000','2012-02-01 00:00:00.000','2050-12-31 23:59:59.000','Family','GAS','Attivo','Bonifico',NULL,NULL,NULL,879,1,1,1,0),(6,6,'2022-10-23 00:00:00.000','2022-12-01 00:00:00.000','2050-12-31 23:59:59.000','Family','EE','In lavorazione','Bollettino',3.3,3,2085,NULL,NULL,NULL,NULL,NULL),(7,7,'2012-08-28 00:00:00.000','2012-09-01 00:00:00.000','2050-12-31 23:59:59.000','Family','EE','Attivo','Bollettino',3.3,3,6023,NULL,NULL,NULL,NULL,NULL),(8,8,'2012-08-28 00:00:00.000','2015-04-01 00:00:00.000','2050-12-31 00:00:00.000','Full Power','EE','Attivo','Bonifico',16.5,15,45581,NULL,NULL,NULL,NULL,NULL),(9,9,'2015-05-01 00:00:00.000','2015-05-01 00:00:00.000','2015-05-31 23:59:59.000','Full Power','EE','Attivo','Bonifico',16.5,15,62484,NULL,NULL,NULL,NULL,NULL),(10,10,'2015-05-01 00:00:00.000','2015-05-01 00:00:00.000','2015-05-31 23:59:59.000','Full Power','EE','Attivo','Bonifico',11,10,50024,NULL,NULL,NULL,NULL,NULL),(11,11,'2010-12-21 00:00:00.000','2011-02-01 00:00:00.000','2050-12-31 23:59:59.000','Super Power','EE','Attivo','Bonifico',60,60,59235,NULL,NULL,NULL,NULL,NULL),(12,12,'2012-08-31 00:00:00.000','2012-09-01 00:00:00.000','2050-12-31 23:59:59.000','Super Power','EE','Attivo','Bonifico',60,60,74024,NULL,NULL,NULL,NULL,NULL),(13,13,'2012-08-31 00:00:00.000','2015-04-01 00:00:00.000','2050-12-31 00:00:00.000','Super Power','GAS','Attivo','Bonifico',NULL,NULL,NULL,8460,1,1,1,1),(14,14,'2010-12-10 00:00:00.000','2011-02-01 00:00:00.000','2050-12-31 23:59:59.000','Super Power','GAS','Attivo','Bonifico',NULL,NULL,NULL,6126,1,1,1,1);
 /*!40000 ALTER TABLE `contract` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Temporary view structure for view `contract_domicile_v`
---
-
-DROP TABLE IF EXISTS `contract_domicile_v`;
-/*!50001 DROP VIEW IF EXISTS `contract_domicile_v`*/;
-SET @saved_cs_client     = @@character_set_client;
-/*!50503 SET character_set_client = utf8mb4 */;
-/*!50001 CREATE VIEW `contract_domicile_v` AS SELECT 
- 1 AS `idContract`,
- 1 AS `idDomicile`,
- 1 AS `service_request_date`,
- 1 AS `validity_start_date`,
- 1 AS `validity_end_date`,
- 1 AS `offert_description`,
- 1 AS `utility`,
- 1 AS `contract_status`,
- 1 AS `payment_type`,
- 1 AS `taxable_power`,
- 1 AS `available_power`,
- 1 AS `annual_energy`,
- 1 AS `annual_gas`,
- 1 AS `use_cooking_foods`,
- 1 AS `production_hot_sanitary_water`,
- 1 AS `individual_heating`,
- 1 AS `commercial_use`,
- 1 AS `description`,
- 1 AS `address`,
- 1 AS `civicNumber`,
- 1 AS `zipCode`,
- 1 AS `locality`,
- 1 AS `province`,
- 1 AS `nation`*/;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `domicile`
@@ -145,7 +109,6 @@ CREATE TABLE `permissions` (
 
 LOCK TABLES `permissions` WRITE;
 /*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
-INSERT INTO `permissions` VALUES (1,1,'E'),(2,2,'E'),(3,3,'E'),(4,4,'E'),(5,5,'E'),(5,6,'E'),(6,7,'E'),(7,8,'E'),(8,9,'E'),(8,10,'E'),(9,11,'E'),(9,12,'E'),(10,13,'E'),(10,14,'E'),(9,14,'V');
 /*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,24 +193,31 @@ DELIMITER ;
 --
 -- Dumping routines for database 'derweze'
 --
-
---
--- Final view structure for view `contract_domicile_v`
---
-
-/*!50001 DROP VIEW IF EXISTS `contract_domicile_v`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = latin1 */;
-/*!50001 SET character_set_results     = latin1 */;
-/*!50001 SET collation_connection      = latin1_swedish_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `contract_domicile_v` AS select `contract`.`id` AS `idContract`,`contract`.`idDomicile` AS `idDomicile`,`contract`.`service_request_date` AS `service_request_date`,`contract`.`validity_start_date` AS `validity_start_date`,`contract`.`validity_end_date` AS `validity_end_date`,`contract`.`offert_description` AS `offert_description`,`contract`.`utility` AS `utility`,`contract`.`contract_status` AS `contract_status`,`contract`.`payment_type` AS `payment_type`,`contract`.`taxable_power` AS `taxable_power`,`contract`.`available_power` AS `available_power`,`contract`.`annual_energy` AS `annual_energy`,`contract`.`annual_gas` AS `annual_gas`,`contract`.`use_cooking_foods` AS `use_cooking_foods`,`contract`.`production_hot_sanitary_water` AS `production_hot_sanitary_water`,`contract`.`individual_heating` AS `individual_heating`,`contract`.`commercial_use` AS `commercial_use`,`domicile`.`description` AS `description`,`domicile`.`address` AS `address`,`domicile`.`civicNumber` AS `civicNumber`,`domicile`.`zipCode` AS `zipCode`,`domicile`.`locality` AS `locality`,`domicile`.`province` AS `province`,`domicile`.`nation` AS `nation` from (`contract` join `domicile` on((`domicile`.`id` = `contract`.`idDomicile`))) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!50003 DROP FUNCTION IF EXISTS `RegisterUser` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `RegisterUser`(email VARCHAR(255),password TEXT) RETURNS int
+    MODIFIES SQL DATA
+BEGIN
+    DECLARE uuidM CHAR(32);
+    DECLARE hashedp CHAR(64);
+    SET uuidM=md5(uuid());
+    SET hashedP=SHA2(CONCAT(email,CONCAT(uuidM,password)),256);
+    INSERT INTO user (id,email,salt,password) VALUES (LAST_INSERT_ID(),email,uuidM,hashedp);
+    RETURN LAST_INSERT_ID();
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -258,4 +228,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-15 14:50:10
+-- Dump completed on 2023-03-12 16:57:07
