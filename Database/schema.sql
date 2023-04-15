@@ -131,7 +131,7 @@ DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
   `idRegistry` int NOT NULL,
   `idContract` int NOT NULL,
-  `type` char(1) NOT NULL,
+  `permission` char(1) NOT NULL,
   KEY `fk_permissions_idRegistry` (`idRegistry`),
   KEY `fk_permissions_idContract` (`idContract`),
   CONSTRAINT `fk_permissions_idContract` FOREIGN KEY (`idContract`) REFERENCES `contract` (`id`),
@@ -228,6 +228,32 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
+-- Temporary view structure for view `user_registry_v`
+--
+
+DROP TABLE IF EXISTS `user_registry_v`;
+/*!50001 DROP VIEW IF EXISTS `user_registry_v`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `user_registry_v` AS SELECT 
+ 1 AS `id`,
+ 1 AS `name`,
+ 1 AS `surname`,
+ 1 AS `business_name`,
+ 1 AS `vat_number`,
+ 1 AS `telephone_number`,
+ 1 AS `social_security_number`,
+ 1 AS `is_admin`,
+ 1 AS `address`,
+ 1 AS `civicNumber`,
+ 1 AS `zipCode`,
+ 1 AS `locality`,
+ 1 AS `province`,
+ 1 AS `nation`,
+ 1 AS `email`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Dumping routines for database 'derweze'
 --
 
@@ -248,6 +274,24 @@ DELIMITER ;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `user_registry_v`
+--
+
+/*!50001 DROP VIEW IF EXISTS `user_registry_v`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = latin1 */;
+/*!50001 SET character_set_results     = latin1 */;
+/*!50001 SET collation_connection      = latin1_swedish_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `user_registry_v` AS select `registry`.`id` AS `id`,`registry`.`name` AS `name`,`registry`.`surname` AS `surname`,`registry`.`business_name` AS `business_name`,`registry`.`vat_number` AS `vat_number`,`registry`.`telephone_number` AS `telephone_number`,`registry`.`social_security_number` AS `social_security_number`,`registry`.`is_admin` AS `is_admin`,`registry`.`address` AS `address`,`registry`.`civicNumber` AS `civicNumber`,`registry`.`zipCode` AS `zipCode`,`registry`.`locality` AS `locality`,`registry`.`province` AS `province`,`registry`.`nation` AS `nation`,`user`.`email` AS `email` from (`registry` join `user` on((`user`.`id` = `registry`.`id`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -258,4 +302,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-15 14:50:10
+-- Dump completed on 2023-04-15 15:40:23
