@@ -57,6 +57,8 @@ services:
       - ./MockAPI/app:/app
     networks:
       - web
+    ports:
+      - 3310:443
 
   mysql:
     hostname: derweze_mysql
