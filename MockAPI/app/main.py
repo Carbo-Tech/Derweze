@@ -1,9 +1,29 @@
+from datetime import datetime, timedelta
+
 from fastapi import FastAPI
 from typing import List,Dict,Any
 import random
 
 app = FastAPI()
+def get_datetimes(start_time, end_time, minutes_interval):
+    """Return a list of every datetime between start_time and end_time
+    every minutes_interval minutes, normalized to X:00 or X:30 minutes.
 
+    start_time: Unix time in seconds of the start datetime.
+    end_time: Unix time in seconds of the end datetime.
+    minutes_interval: Interval in minutes between datetimes.
+
+    Returns: List of datetime objects.
+    """
+    datetimes = []
+    current_time = datetime.utcfromtimestamp(start_time)
+    while current_time.timestamp() < end_time:
+        current_minute = current_time.minute
+        if current_minute %5!=0:
+            current_time += timedelta(minutes=(minutes_interval - current_minute) % minutes_interval)
+        datetimes.append(current_time)
+        current_time += timedelta(minutes=minutes_interval)
+    return datetimes
 
 @app.get("/")
 def hello_world():
@@ -57,6 +77,7 @@ def get_plans(address: str) -> List[dict]:
 def get_user_electricity(idContract: int, startTime: int, endTime: int) -> Dict[str, Dict[str, List[Dict[str, int]]]]:
     # Here, we would query a database or API to get the electricity usage data for the specified contract and time range
     # For the sake of this example, we will hard-code some sample data
+    
     electricity_usage = {
         "co2": 20, # in g/kWh
         "records": [
@@ -75,7 +96,7 @@ def get_user_electricity(idContract: int, startTime: int, endTime: int) -> Dict[
 ################################################################################################################################
 
 # Simulated database of user electricity bills
-user_bills = {
+user_billsE = {
     1: {
         "2022/01": {
             "total": 100,
@@ -116,11 +137,11 @@ user_bills = {
 
 @app.get("/getUserElectricityBill")
 def get_user_electricity_bill(idContract: int, date: str) -> Dict[str, Any]:
-    if idContract not in user_bills:
+    if idContract not in user_billsE:
         return {"message": "User not found"}
-    if date not in user_bills[idContract]:
+    if date not in user_billsE[idContract]:
         return {"message": "Electricity bill not found"}
-    return {"electricityBill": user_bills[idContract][date]}
+    return {"electricityBill": user_billsE[idContract][date]}
 
 ################################################################################################################################
 
@@ -131,7 +152,7 @@ async def get_gas_plans(address: str, type: str):
         {
             "id": 1,
             "company": "Eco-Gas",
-            "image": "https://example.com/eco-gas.jpg",
+            "image": "https://combustiblesecogas.com/wp-content/uploads/2020/09/logo-ecogas.png",
             "basePrice": 60,
             "pricePerMQ": 0.8,
             "priceOscillation": 5,
@@ -142,7 +163,7 @@ async def get_gas_plans(address: str, type: str):
         {
             "id": 2,
             "company": "Budget Gas",
-            "image": "https://example.com/budget-gas.jpg",
+            "image": "https://cdn.autoconnectedcar.com/wp-content/uploads/2017/08/GB-Blue-Horizontal-RGB.png",
             "basePrice": 50,
             "pricePerMQ": 0.5,
             "priceOscillation": 10,
@@ -186,7 +207,7 @@ async def get_user_gas(idContract: int, startTime: int, endTime: int):
 ################################################################################################################################
 
 # Simulated database of user gas bills
-user_bills = {
+user_billsG = {
     1: {
         "2022/01": {
             "total": 50,
@@ -227,11 +248,11 @@ user_bills = {
 
 @app.get("/getUserGasBill")
 def get_user_gas_bill(idContract: int, date: str) -> Dict[str, Any]:
-    if idContract not in user_bills:
+    if idContract not in user_billsG:
         return {"message": "User not found"}
-    if date not in user_bills[idContract]:
+    if date not in user_billsG[idContract]:
         return {"message": "Gas bill not found"}
-    return {"gasBill": user_bills[idContract][date]}
+    return {"gasBill": user_billsG[idContract][date]}
 
 ################################################################################################################################
 

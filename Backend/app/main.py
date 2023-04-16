@@ -73,6 +73,10 @@ class Contract(BaseModel):
     nation:str=None
     permission:str=None
 
+class Usage(BaseModel):
+    co2: int
+    records: Dict[str,datetime.datetime]
+
 
 def fetchall(cursor):
     columns = [column[0] for column in cursor.description]
@@ -388,6 +392,20 @@ async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(
 
 
 @app.post("/getContractsUser")
+async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
+
+    current_user: User = get_current_user(token=token.get("access_token"))
+
+    # Get registry data for the user
+    contracts: List[Contract] = get_contracts_by_user(current_user, conn=conn)
+
+    if not contracts:
+        raise HTTPException(status_code=500, detail="Registry data not found")
+
+    # Return registry data
+    return contracts
+
+@app.post("/getContractUsage")
 async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
 
     current_user: User = get_current_user(token=token.get("access_token"))
