@@ -1,6 +1,7 @@
 import datetime
 from typing import Dict, List, Optional, Tuple
 
+import requests
 import jwt
 import mysql.connector
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -47,35 +48,41 @@ class Contract(BaseModel):
     """
     Registry model with properties for a business registry.
     """
-    idContract:str=None
-    idDomicile:str=None
-    service_request_date:datetime.datetime=None
-    validity_start_date:datetime.datetime=None
-    validity_end_date:datetime.datetime=None
-    offert_description:str=None
-    utility:str=None
-    contract_status:str=None
-    payment_type:str=None
-    taxable_power:str=None
-    available_power:str=None
-    annual_energy:str=None
-    annual_gas:str=None
-    use_cooking_foods:str=None
-    production_hot_sanitary_water:str=None
-    individual_heating:str=None
-    commercial_use:str=None
-    description:str=None
-    address:str=None
-    civicNumber:str=None
-    zipCode:str=None
-    locality:str=None
-    province:str=None
-    nation:str=None
-    permission:str=None
+    idContract: str = None
+    idDomicile: str = None
+    service_request_date: datetime.datetime = None
+    validity_start_date: datetime.datetime = None
+    validity_end_date: datetime.datetime = None
+    offert_description: str = None
+    utility: str = None
+    contract_status: str = None
+    payment_type: str = None
+    taxable_power: str = None
+    available_power: str = None
+    annual_energy: str = None
+    annual_gas: str = None
+    use_cooking_foods: str = None
+    production_hot_sanitary_water: str = None
+    individual_heating: str = None
+    commercial_use: str = None
+    description: str = None
+    address: str = None
+    civicNumber: str = None
+    zipCode: str = None
+    locality: str = None
+    province: str = None
+    nation: str = None
+    permission: str = None
+
+
+class Record(BaseModel):
+    dateTime: str
+    value: int
+
 
 class Usage(BaseModel):
     co2: int
-    records: Dict[str,datetime.datetime]
+    records: List[Record]
 
 
 def fetchall(cursor):
@@ -108,6 +115,17 @@ def get_conn() -> MySQLConnection:
         database='derweze'
     )
     return conn
+
+
+def get_usage_by_contract(idContract: int,type:str,startTime:datetime,endTime:datetime) -> Usage:
+    if(type=="Gas"):
+        response = requests.get('http://mockapi:443/getUserGas',params={"idContract":idContract,"startTime":startTime,"endTime":endTime})
+    elif(type=="Electricity"):
+        response = requests.get('http://mockapi:443/getUserElectricity',params={"idContract":idContract,"startTime":startTime,"endTime":endTime})
+    if response:
+        print(response.json())
+        return response
+    return None
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
@@ -307,7 +325,7 @@ def get_contracts_by_user(user: User, conn: MySQLConnection = Depends(get_conn))
         select_query, {'email': user.email})
     result = fetchall(cursor=cursor)
     print(result)
-    contracts=list()
+    contracts = list()
     if result:
         for i in result:
             contracts.append(Contract(**i))
@@ -349,7 +367,8 @@ async def login(user: User, conn: MySQLConnection = Depends(get_conn)):
         )
 
     # Create an access token for the user
-    access_token = create_access_token({"sub": user.email},datetime.timedelta(hours=5))#😑😑
+    access_token = create_access_token(
+        {"sub": user.email}, datetime.timedelta(hours=5))  # 😑😑
 
     # Close the database connection
     conn.close()
@@ -405,13 +424,19 @@ async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(
     # Return registry data
     return contracts
 
+
 @app.post("/getContractUsage")
-async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
+async def get_user_dataT(data: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
 
-    current_user: User = get_current_user(token=token.get("access_token"))
-
+    current_user: User = get_current_user(token=data["token"])
+    print(data["token"],data["idContract"])
+    if not data["startTime"]:
+        data["startTime"]=datetime.datetime.utcnow() - datetime.timedelta(month=1)
+    if not data["endTime"]:
+        data["endTime"]=datetime.datetime.utcnow() 
+        
     # Get registry data for the user
-    contracts: List[Contract] = get_contracts_by_user(current_user, conn=conn)
+    contracts: Usage=get_usage_by_contract(data["idContract"],"Electricity",data["startTime"],data["endTime"])
 
     if not contracts:
         raise HTTPException(status_code=500, detail="Registry data not found")

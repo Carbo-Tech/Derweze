@@ -1,10 +1,23 @@
 from datetime import datetime, timedelta
 
 from fastapi import FastAPI
-from typing import List,Dict,Any
+from typing import List, Dict, Any
 import random
 
 app = FastAPI()
+
+
+def gaussian_random(seed, median, standardDeviation=None):
+    if not standardDeviation:
+        standardDeviation = median/3
+    random.seed(seed)
+    mu, sigma = median, standardDeviation
+    ret = -1
+    while ret <= 0:
+        ret = random.gauss(mu, sigma)
+    return ret
+
+
 def get_datetimes(start_time, end_time, minutes_interval):
     """Return a list of every datetime between start_time and end_time
     every minutes_interval minutes, normalized to X:00 or X:30 minutes.
@@ -19,17 +32,42 @@ def get_datetimes(start_time, end_time, minutes_interval):
     current_time = datetime.utcfromtimestamp(start_time)
     while current_time.timestamp() < end_time:
         current_minute = current_time.minute
-        if current_minute %5!=0:
-            current_time += timedelta(minutes=(minutes_interval - current_minute) % minutes_interval)
+        if current_minute % minutes_interval != 0:
+            current_time -= timedelta(minutes=current_minute %
+                                      minutes_interval)
+        if current_time.second != 0:
+            current_time -= timedelta(seconds=current_time.second)
         datetimes.append(current_time)
         current_time += timedelta(minutes=minutes_interval)
+        current_time = current_time.replace(second=0, microsecond=0)
     return datetimes
+
+
+def get_Records(idContract: int, startTime: datetime, endTime: datetime, medianValue: float, medianCo2: float, standardDeviationCo2=None, minutesSteps: int = 30):
+    times = get_datetimes(startTime.timestamp(),
+                          endTime.timestamp(), minutesSteps)
+    records = []
+    for i in times:
+        records.append({"dateTime": i, "value": gaussian_random(
+            str(i.timestamp())+str(idContract), medianValue)})  # average m3 natural gas usage per family
+    print(len(records))
+    # 1800 average emissions in grams
+    co2Val = gaussian_random(str(idContract), medianCo2, standardDeviationCo2)
+    total=sum(record["value"] for record in records)
+    return {
+        "id": idContract,
+        "co2": int(total*co2Val),
+        "total":int(total),
+        "records": records
+    }
+
 
 @app.get("/")
 def hello_world():
     return {"message": "mockapi"}
 
 ################################################################################################################################
+
 
 @app.get("/getElectricityPlans")
 def get_plans(address: str) -> List[dict]:
@@ -73,27 +111,18 @@ def get_plans(address: str) -> List[dict]:
 
 ################################################################################################################################
 
+
 @app.get("/getUserElectricity")
-def get_user_electricity(idContract: int, startTime: int, endTime: int) -> Dict[str, Dict[str, List[Dict[str, int]]]]:
+def get_user_electricity(idContract: int, startTime: datetime, endTime: datetime) -> Dict[str, Dict[str, List[Dict[str, int]]]]:
     # Here, we would query a database or API to get the electricity usage data for the specified contract and time range
     # For the sake of this example, we will hard-code some sample data
-    
-    electricity_usage = {
-        "co2": 20, # in g/kWh
-        "records": [
-            {"dateTime": "01/01/00/00", "value": 100},
-            {"dateTime": "01/01/00/15", "value": 110},
-            {"dateTime": "01/01/00/30", "value": 105},
-            {"dateTime": "01/01/00/45", "value": 95},
-            {"dateTime": "01/01/01/00", "value": 90},
-            {"dateTime": "01/01/01/15", "value": 85},
-            {"dateTime": "01/01/01/30", "value": 80},
-            {"dateTime": "01/01/01/45", "value": 75}
-        ]
-    }
+
+    electricity_usage = get_Records(
+        idContract=idContract, startTime=startTime, endTime=endTime, medianValue=0.1541095890, medianCo2=650)
     return {"electricityUsage": electricity_usage}
 
 ################################################################################################################################
+
 
 # Simulated database of user electricity bills
 user_billsE = {
@@ -135,6 +164,7 @@ user_billsE = {
     }
 }
 
+
 @app.get("/getUserElectricityBill")
 def get_user_electricity_bill(idContract: int, date: str) -> Dict[str, Any]:
     if idContract not in user_billsE:
@@ -144,6 +174,7 @@ def get_user_electricity_bill(idContract: int, date: str) -> Dict[str, Any]:
     return {"electricityBill": user_billsE[idContract][date]}
 
 ################################################################################################################################
+
 
 @app.get("/getGasPlans")
 async def get_gas_plans(address: str, type: str):
@@ -187,21 +218,13 @@ async def get_gas_plans(address: str, type: str):
 
 ################################################################################################################################
 
+
 @app.get("/getUserGas")
-async def get_user_gas(idContract: int, startTime: int, endTime: int):
+async def get_user_gas(idContract: int, startTime: datetime, endTime: datetime):
     # In a real-world scenario, you would query a database or API to get the gas usage data
-    gas_usage = {
-        "id": idContract,
-        "co2": 200,  # total CO2 emissions
-        "records": [
-            {"dateTime": "05/01/12:30", "value": 100},
-            {"dateTime": "05/01/13:30", "value": 150},
-            {"dateTime": "05/01/14:30", "value": 120},
-            {"dateTime": "05/01/15:30", "value": 90},
-            {"dateTime": "05/01/16:30", "value": 80},
-            {"dateTime": "05/01/17:30", "value": 110}
-        ]
-    }
+
+    gas_usage = get_Records(idContract, startTime=startTime, endTime=endTime,
+                            medianValue=0.073, medianCo2=1800, standardDeviationCo2=200)
     return {"gasUsage": gas_usage}
 
 ################################################################################################################################
@@ -246,6 +269,7 @@ user_billsG = {
     }
 }
 
+
 @app.get("/getUserGasBill")
 def get_user_gas_bill(idContract: int, date: str) -> Dict[str, Any]:
     if idContract not in user_billsG:
@@ -255,6 +279,7 @@ def get_user_gas_bill(idContract: int, date: str) -> Dict[str, Any]:
     return {"gasBill": user_billsG[idContract][date]}
 
 ################################################################################################################################
+
 
 # Simulated database of user electricity usage
 user_electricity = {
@@ -291,6 +316,7 @@ user_electricity = {
         ]
     }
 }
+
 
 @app.get("/getUserElectricity")
 def get_user_electricity(idContract: int, startTime: str, endTime: str) -> Dict[str, Any]:
