@@ -77,11 +77,13 @@ class Contract(BaseModel):
 
 class Record(BaseModel):
     dateTime: str
-    value: int
+    value: float
 
 
 class Usage(BaseModel):
     co2: int
+    idContract:int
+    total:int
     records: List[Record]
 
 
@@ -120,11 +122,12 @@ def get_conn() -> MySQLConnection:
 def get_usage_by_contract(idContract: int,type:str,startTime:datetime,endTime:datetime) -> Usage:
     if(type=="Gas"):
         response = requests.get('http://mockapi:443/getUserGas',params={"idContract":idContract,"startTime":startTime,"endTime":endTime})
+        if response:
+            return Usage(**response.json()["gasUsage"])
     elif(type=="Electricity"):
         response = requests.get('http://mockapi:443/getUserElectricity',params={"idContract":idContract,"startTime":startTime,"endTime":endTime})
-    if response:
-        print(response.json())
-        return response
+        if response:
+            return Usage(**response.json()["electricityUsage"])
     return None
 
 
@@ -229,7 +232,7 @@ def get_salt_by_email(conn: MySQLConnection, email: str) -> Optional[str]:
     Returns the salt with the given email address
     """
     cursor = conn.cursor()
-    select_query = 'SELECT salt FROM user WHERE email = %s'
+    select_query = 'SELECT salt FROM user WHERE email = %s;'
     cursor.execute(select_query, (email,))
     result = fetchone(cursor)
     cursor.close()
@@ -429,17 +432,17 @@ async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(
 async def get_user_dataT(data: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
 
     current_user: User = get_current_user(token=data["token"])
-    print(data["token"],data["idContract"])
-    if not data["startTime"]:
-        data["startTime"]=datetime.datetime.utcnow() - datetime.timedelta(month=1)
-    if not data["endTime"]:
+    print(data["token"],data)
+    if not data.get("startTime"):
+        data["startTime"]=datetime.datetime.utcnow() - datetime.timedelta(days=31)
+    if not data.get("endTime"):
         data["endTime"]=datetime.datetime.utcnow() 
         
     # Get registry data for the user
-    contracts: Usage=get_usage_by_contract(data["idContract"],"Electricity",data["startTime"],data["endTime"])
+    contracts: Usage=get_usage_by_contract(idContract=data["idContract"],type=data["utility"],startTime= data["startTime"],endTime= data["endTime"])
 
     if not contracts:
-        raise HTTPException(status_code=500, detail="Registry data not found")
+        raise HTTPException(status_code=500, detail="No data found")
 
     # Return registry data
     return contracts

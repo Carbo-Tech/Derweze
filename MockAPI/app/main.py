@@ -29,7 +29,7 @@ def get_datetimes(start_time, end_time, minutes_interval):
     Returns: List of datetime objects.
     """
     datetimes = []
-    current_time = datetime.utcfromtimestamp(start_time)
+    current_time = datetime.utcfromtimestamp(start_time).replace(microsecond=0)
     while current_time.timestamp() < end_time:
         current_minute = current_time.minute
         if current_minute % minutes_interval != 0:
@@ -37,6 +37,8 @@ def get_datetimes(start_time, end_time, minutes_interval):
                                       minutes_interval)
         if current_time.second != 0:
             current_time -= timedelta(seconds=current_time.second)
+        if current_time.microsecond != 0:
+            current_time -= timedelta(seconds=current_time.microsecond)
         datetimes.append(current_time)
         current_time += timedelta(minutes=minutes_interval)
         current_time = current_time.replace(second=0, microsecond=0)
@@ -47,6 +49,7 @@ def get_Records(idContract: int, startTime: datetime, endTime: datetime, medianV
     times = get_datetimes(startTime.timestamp(),
                           endTime.timestamp(), minutesSteps)
     records = []
+    print(times)
     for i in times:
         records.append({"dateTime": i, "value": gaussian_random(
             str(i.timestamp())+str(idContract), medianValue)})  # average m3 natural gas usage per family
@@ -55,7 +58,7 @@ def get_Records(idContract: int, startTime: datetime, endTime: datetime, medianV
     co2Val = gaussian_random(str(idContract), medianCo2, standardDeviationCo2)
     total=sum(record["value"] for record in records)
     return {
-        "id": idContract,
+        "idContract": idContract,
         "co2": int(total*co2Val),
         "total":int(total),
         "records": records
@@ -318,19 +321,20 @@ user_electricity = {
 }
 
 
-@app.get("/getUserElectricity")
-def get_user_electricity(idContract: int, startTime: str, endTime: str) -> Dict[str, Any]:
-    if idContract not in user_electricity:
-        return {"message": "User not found"}
-    records = []
-    for bill in user_electricity[idContract]:
-        if bill >= startTime and bill <= endTime:
-            records += user_electricity[idContract][bill]
-    if not records:
-        return {"message": "No electricity usage found"}
-    total_usage = sum(record["value"] for record in records)
-    co2_emissions = total_usage * 400  # 400g of CO2 per kWh
-    return {"ElectricityUsage": {
-        "co2": co2_emissions,
-        "records": records
-    }}
+#@app.get("/getUserElectricity")
+#def get_user_electricity(idContract: int, startTime: str, endTime: str) -> Dict[str, Any]:
+#    if idContract not in user_electricity:
+#        return {"message": "User not found"}
+#    records = []
+#    for bill in user_electricity[idContract]:
+#        if bill >= startTime and bill <= endTime:
+#            records += user_electricity[idContract][bill]
+#    if not records:
+#        return {"message": "No electricity usage found"}
+#    total_usage = sum(record["value"] for record in records)
+#    co2_emissions = total_usage * 400  # 400g of CO2 per kWh
+#    return {"ElectricityUsage": {
+#        "co2": co2_emissions,
+#        "records": records
+#    }}
+#
