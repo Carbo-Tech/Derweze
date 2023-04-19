@@ -11,8 +11,8 @@ export default function handler(req:any, res:any) {
             body: JSON.stringify({"token":body["access_token"],"idContract":body["idContract"],"utility":body["utility"]}) 
 
               
-        }).then(response => {console.log(response.body);return response.json()})
-            .then(reso => {res.status(200).json({...reso});console.log(reso)})
+        }).then(response => {return response.json()})
+            .then(reso => {res.status(200).json({...reso});})
             .catch(err => console.log(err))         
     }
   }

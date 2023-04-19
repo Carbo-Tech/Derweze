@@ -47,25 +47,65 @@ const parseContractData = (data: Array<any>, unit: string, nElements: number = 1
   };
 };
 
+const parseContractsCost = (data: Array<any>) => {
+  var labels: string[] = [];
+  var values: number[] = [];
+  var total = 0;
+  console.log("data", data)
+  if (data["records"] != undefined) {
+    data["records"].map((record) => {
+      labels.push(record["name"]);
+      values.push(total + record["value"]);
+    });
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: "€",
+          data: values,
+          borderWidth: 1,
+          backgroundColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(255, 206, 86, 1)'
+          ]
+
+        }
+      ]
+    };
+  };
+};
+
 const getDataContracts = async (jwt: string, contracts: any) => {
   const dataContractsElectricity = [];
+  const dataContractsElectricityCost = [];
   await Promise.all(Object.keys(contracts).map(async (key) => {
     if (contracts[key]["utility"] == "EE" || contracts[key]["utility"] == "EE/GAS") {
-      dataContractsElectricity.push(await getContractUsage(jwt, contracts[key]["idContract"], "Electricity"));
+      const temp = await getContractUsage(jwt, contracts[key]["idContract"], "Electricity");
+      dataContractsElectricity.push(temp)
+      dataContractsElectricityCost.push({ ...(await getContractProjectedPrice(jwt, contracts[key]["idContract"])), "total": temp["total"] });
     };
   }));
   const dataContractsGas = [];
+  const dataContractsGasCost = [];
   await Promise.all(Object.keys(contracts).map(async (key) => {
     if (contracts[key]["utility"] == "GAS" || contracts[key]["utility"] == "EE/GAS") {
-      dataContractsGas.push(await getContractUsage(jwt, contracts[key]["idContract"], "Gas"));
+      const temp = await getContractUsage(jwt, contracts[key]["idContract"], "Gas")
+      dataContractsGas.push(temp);
+      dataContractsGasCost.push({ ...(await getContractProjectedPrice(jwt, contracts[key]["idContract"])), "total": temp["total"] });
     };
   }));
   const data = {
     "Electricity": dataContractsElectricity,
-    "Gas": dataContractsGas
+    "Gas": dataContractsGas,
+    "ElectricityCost": dataContractsElectricityCost,
+    "GasCost": dataContractsGasCost
   };
   return data;
 };
+
 
 const mergeContracts = (contracts: Array<any>) => {
   const merged = contracts.reduce(
@@ -92,6 +132,26 @@ const mergeContracts = (contracts: Array<any>) => {
   return merged
 };
 
+
+const contractsCost = (contracts: Array<any>) => {
+  const merged = contracts.reduce((acc, curr) => {
+    curr.records.forEach((record, index) => {
+      if (acc.records[index]) {
+        acc.records[index].value += Math.floor(((record.value / 100) * curr.total));
+      } else {
+        acc.records.push({
+          name: record.name,
+          value: Math.floor((record.value / 100) * curr.total)
+        });
+      }
+    });
+    return acc;
+  }, { records: [] });
+
+
+  return merged
+};
+
 const getNElementsFromArray = (array: Array<any>, n: number) => {
   const step = Math.floor(array.length / n);
   const result = [];
@@ -101,16 +161,7 @@ const getNElementsFromArray = (array: Array<any>, n: number) => {
   return result;
 };
 
-function extractDateTimeValue(json) {
-  const records = json["records"];
-  const dateTimeValuePairs = records.map(record => {
-    return {
-      dateTime: record.dateTime,
-      value: record.value
-    };
-  });
-  return dateTimeValuePairs;
-};
+
 
 const getContractUsage = async (jwt: string, idContract: string, utility: string) => {
   const response = await fetch("/api/contracts/getContractUsage", {
@@ -122,35 +173,30 @@ const getContractUsage = async (jwt: string, idContract: string, utility: string
   return data;
 };
 
-const lineData = {
-  labels: ['Electricity', 'Delivery', 'Regulatory charges', 'Other charges', 'Taxes'],
-  datasets: [
-    {
-      label: '€',
-      data: [150, 59, 40, 81, 56],
-      borderWidth: 1,
-    }
-  ]
+
+
+const getContractProjectedPrice = async (jwt: string, idContract: string) => {
+  const response = await fetch("/api/contracts/getContractProjectedPrice", {
+    method: 'POST',
+    mode: 'cors',
+    body: JSON.stringify({ "access_token": jwt, "idContract": idContract })
+  });
+  const data = await response.json();
+  return data;
 };
 
-const barData = {
-  labels: ['Methane', 'Delivery', 'Regulatory charges', 'Other charges', 'Taxes'],
-  datasets: [
-    {
-      label: '€',
-      data: [90, 59, 40, 81, 56],
-      borderWidth: 1,
-    }
-  ]
-};
+
+
+
+
 
 export default function Index() {
   const session = useSession();
   const [contracts, setContracts] = useState({});
-  const [contractsElectricityUsage, setContractsElectricityUsage] = useState();
-  const [contractsGasUsage, setContractsGasUsage] = useState([]);
-  const [contractsTotalGasUsage, setContractsTotalGasUsage] = useState({ records: [{ dateTime: "", value: 0 }] });
-  const [contractsTotalElectricityUsage, setContractsTotalElectricityUsage] = useState({ records: [{ dateTime: "", value: 0 }] });
+  const [contractsElectricityCost, setContractsElectricityCost] = useState({ "total": 0, "unit": "KWh", "records": [{ "name": "", "value": 0 }] });
+  const [contractsGasCost, setContractsGasCost] = useState({ "total": 0, "unit": "Smc", "records": [{ "name": "", "value": 0 }] });
+  const [contractsTotalGasUsage, setContractsTotalGasUsage] = useState({ total: 0, records: [{ dateTime: "", value: 0 }] });
+  const [contractsTotalElectricityUsage, setContractsTotalElectricityUsage] = useState({ total: 0, records: [{ dateTime: "", value: 0 }] });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -168,10 +214,12 @@ export default function Index() {
       if (session.status == "authenticated") {
         const jwt = session.data?.user["access_token"];
         const data = await getDataContracts(jwt, contracts);
-        setContractsElectricityUsage(data["Electricity"]);
-        setContractsGasUsage(data["Gas"]);
+        console.log("contrcost", mergeContracts(data["Electricity"]))
+        setContractsElectricityCost(contractsCost(data["ElectricityCost"]))
+        setContractsGasCost(contractsCost(data["GasCost"]))
         setContractsTotalElectricityUsage(mergeContracts(data["Electricity"]));
         setContractsTotalGasUsage(mergeContracts(data["Gas"]));
+
       };
     };
     fetchData();
@@ -185,19 +233,25 @@ export default function Index() {
         <Flex direction="row" justifyContent="space-between">
           <Flex direction="column" marginLeft="10%" justifyContent="space-between">
             <Box marginLeft="10%">
-              <Chart data={lineData} radius={120} thicknessP={20} text="Electricity" />
+              <Chart data={parseContractsCost(contractsElectricityCost)} total={contractsTotalElectricityUsage.total} unit="KWh" radius={120} thicknessP={20} text="Electricity" />
+
             </Box>
+            <Spacer y={1}></Spacer>
+
             <Box marginLeft="10%">
-              <UsageChart data={parseContractData(contractsTotalElectricityUsage.records, "KWh",50)} />
+              <UsageChart data={parseContractData(contractsTotalElectricityUsage.records, "KWh", 50)} />
             </Box>
 
           </Flex>
           <Flex direction="column" marginRight="10%" justifyContent="space-between">
             <Box marginRight="10%">
-              <Chart data={barData} radius={120} thicknessP={20} text="Gas" />
+              <Chart data={parseContractsCost(contractsGasCost)} total={contractsTotalGasUsage.total} unit="SMC" radius={120} thicknessP={20} text="Gas" />
+
             </Box>
+            <Spacer y={1}></Spacer>
+
             <Box marginRight="10%">
-            <UsageChart data={parseContractData(contractsTotalGasUsage.records, "M3", 50)} />
+              <UsageChart data={parseContractData(contractsTotalGasUsage.records, "M3", 50)} />
             </Box>
 
           </Flex>

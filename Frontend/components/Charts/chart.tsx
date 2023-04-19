@@ -1,7 +1,7 @@
 import "chart.js/auto";
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 
-export default function Chart({ thicknessP, radius, data, text }:any) {
+export default function Chart({ thicknessP, radius, data, text, unit, total }: any) {
     const thickness = {
         id: "thickness",
         beforeDraw: function (chart, options) {
@@ -13,11 +13,13 @@ export default function Chart({ thicknessP, radius, data, text }:any) {
             });
         }
     };
-    
-    
+
+
     const doughnutOptions = {
-        
+        responsive: true,
+
         plugins: {
+
             title: {
                 display: true,
                 text: text,
@@ -28,7 +30,7 @@ export default function Chart({ thicknessP, radius, data, text }:any) {
             },
             legend: {
                 display: false,
-    
+
             },
 
             thickness: {
@@ -36,7 +38,7 @@ export default function Chart({ thicknessP, radius, data, text }:any) {
                 radius: radius,
             }
         }
-    
+
     }
     const textCenter = {
         id: "textCenter",
@@ -47,12 +49,18 @@ export default function Chart({ thicknessP, radius, data, text }:any) {
             ctx.font = "bold 19px sans-serif";
             ctx.textAlign = "center"
             ctx.textBaseAlign = "middle"
-            ctx.fillText(`€${data.datasets[0].data.reduce((acc: number, curr: number) => acc + curr, 0)}`, chart.getDatasetMeta(0).data[0].x, chart.getDatasetMeta(0).data[0].y)
+            const x = chart.getDatasetMeta(0).data[0].x;
+            const y1 = chart.getDatasetMeta(0).data[0].y;
+            const y2 = y1 + 25; // add some vertical spacing
+            ctx.fillText(`€${data.datasets[0].data.reduce((acc: number, curr: number) => acc + curr, 0)}`, x, y1)
         }
     }
     return (
         <div style={{ width: '400px', height: '400px' }}>
-            <Doughnut  data={data} options={doughnutOptions} plugins={[thickness, textCenter]} />
+            <Doughnut data={data} options={doughnutOptions} plugins={[thickness, textCenter]} />
+            <div style={{ textAlign: "center" }}>
+                <p style={{ textAlign: "center" }}>{total}SMC</p>
+            </div>
         </div>
     )
 }

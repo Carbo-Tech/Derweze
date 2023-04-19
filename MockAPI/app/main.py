@@ -45,15 +45,13 @@ def get_datetimes(start_time, end_time, minutes_interval):
     return datetimes
 
 
-def get_Records(idContract: int, startTime: datetime, endTime: datetime, medianValue: float, medianCo2: float, standardDeviationCo2=None, minutesSteps: int = 30):
+def get_Records(idContract: int, startTime: datetime, endTime: datetime, medianValue: float, medianCo2: float, medianPrice=0.077, standardDeviationCo2=None, minutesSteps: int = 30):
     times = get_datetimes(startTime.timestamp(),
                           endTime.timestamp(), minutesSteps)
     records = []
-    print(times)
     for i in times:
         records.append({"dateTime": i, "value": gaussian_random(
             str(i.timestamp())+str(idContract), medianValue)})  # average m3 natural gas usage per family
-    print(len(records))
     # 1800 average emissions in grams
     co2Val = gaussian_random(str(idContract), medianCo2, standardDeviationCo2)
     total=sum(record["value"] for record in records)
@@ -61,6 +59,7 @@ def get_Records(idContract: int, startTime: datetime, endTime: datetime, medianV
         "idContract": idContract,
         "co2": int(total*co2Val),
         "total":int(total),
+        "pricePerUnit":gaussian_random(str(idContract)+"pricePerUnit",medianPrice,medianPrice/10),
         "records": records
     }
 
@@ -121,11 +120,26 @@ def get_user_electricity(idContract: int, startTime: datetime, endTime: datetime
     # For the sake of this example, we will hard-code some sample data
 
     electricity_usage = get_Records(
-        idContract=idContract, startTime=startTime, endTime=endTime, medianValue=0.1541095890, medianCo2=650)
+        idContract=idContract, startTime=startTime, endTime=endTime, medianValue=0.1541095890, medianCo2=650, medianPrice=0.070)
     return {"electricityUsage": electricity_usage}
 
 ################################################################################################################################
-
+@app.get("/getContractProjectedPrice")
+def get_user_electricity(idContract: int) -> List[Dict[str,float]]:
+    # will return percentages of prices (eg {"Commodity":30%,"Taxes":10%})
+    ret:List=[]
+    commodity=gaussian_random(str(idContract)+"commodity",30)
+    delivery=gaussian_random(str(idContract)+"delivery",15)
+    regulatoryCharges=gaussian_random(str(idContract)+"regulatoryCharges",20)
+    otherCharges=gaussian_random(str(idContract)+"otherCharges",14)
+    taxes=gaussian_random(str(idContract)+"taxes",22,0)
+    total = sum([commodity,delivery,regulatoryCharges,otherCharges,taxes])
+    ret.append({"name":"commodity","value":(commodity/total)*100})
+    ret.append({"name":"delivery","value":(delivery/total)*100})
+    ret.append({"name":"regulatoryCharges","value":(regulatoryCharges/total)*100})
+    ret.append({"name":"otherCharges","value":(otherCharges/total)*100})
+    ret.append({"name":"taxes","value":(taxes/total)*100})
+    return {"idContract":idContract,"records":ret}
 
 # Simulated database of user electricity bills
 user_billsE = {
@@ -227,7 +241,7 @@ async def get_user_gas(idContract: int, startTime: datetime, endTime: datetime):
     # In a real-world scenario, you would query a database or API to get the gas usage data
 
     gas_usage = get_Records(idContract, startTime=startTime, endTime=endTime,
-                            medianValue=0.073, medianCo2=1800, standardDeviationCo2=200)
+                            medianValue=0.073, medianCo2=1800, standardDeviationCo2=200, medianPrice=0.5)
     return {"gasUsage": gas_usage}
 
 ################################################################################################################################

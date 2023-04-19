@@ -75,18 +75,26 @@ class Contract(BaseModel):
     permission: str = None
 
 
-class Record(BaseModel):
+class RecordUsage(BaseModel):
     dateTime: str
+    value: float
+
+class RecordPercentagePrice(BaseModel):
+    name: str
     value: float
 
 
 class Usage(BaseModel):
     co2: int
     idContract:int
+    pricePerUnit:float
     total:int
-    records: List[Record]
+    records: List[RecordUsage]
 
-
+class ContractPrice(BaseModel):
+    idContract:int
+    records: List[RecordPercentagePrice]
+    
 def fetchall(cursor):
     columns = [column[0] for column in cursor.description]
     ret = []
@@ -129,6 +137,15 @@ def get_usage_by_contract(idContract: int,type:str,startTime:datetime,endTime:da
         if response:
             return Usage(**response.json()["electricityUsage"])
     return None
+
+def get_projected_price_by_contract(idContract: int) -> ContractPrice:
+
+    response = requests.get('http://mockapi:443/getContractProjectedPrice',params={"idContract":idContract})
+    if response:
+        print(response.json())
+        return ContractPrice(**response.json())
+    return None
+
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
@@ -427,6 +444,21 @@ async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(
     # Return registry data
     return contracts
 
+
+@app.post("/getContractProjectedPrice")
+async def get_user_dataT(data: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
+
+    current_user: User = get_current_user(token=data["token"])
+
+        
+    # Get registry data for the user
+    contracts: Usage=get_projected_price_by_contract(idContract=data["idContract"])
+
+    if not contracts:
+        raise HTTPException(status_code=500, detail="No data found")
+
+    # Return registry data
+    return contracts
 
 @app.post("/getContractUsage")
 async def get_user_dataT(data: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
