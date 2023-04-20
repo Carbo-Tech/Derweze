@@ -62,7 +62,7 @@ const parseContractsCost = (data: Array<any>) => {
       datasets: [
         {
           label: "€",
-          data: values,
+          data: values[0]!=undefined ? values: [0],
           borderWidth: 1,
           backgroundColor: [
             'rgba(255, 99, 132, 1)',
