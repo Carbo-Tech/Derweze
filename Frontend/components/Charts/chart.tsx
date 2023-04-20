@@ -55,11 +55,12 @@ export default function Chart({ thicknessP, radius, data, text, unit, total }: a
             ctx.fillText(`€${data.datasets[0].data.reduce((acc: number, curr: number) => acc + curr, 0)}`, x, y1)
         }
     }
+    console.log("datapassedtochart",data)
     return (
         <div style={{ width: '400px', height: '400px' }}>
             <Doughnut data={data} options={doughnutOptions} plugins={[thickness, textCenter]} />
             <div style={{ textAlign: "center" }}>
-                <p style={{ textAlign: "center" }}>{total}SMC</p>
+                <p style={{ textAlign: "center" }}>{total}{unit}</p>
             </div>
         </div>
     )

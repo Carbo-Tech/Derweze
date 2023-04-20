@@ -79,6 +79,7 @@ class RecordUsage(BaseModel):
     dateTime: str
     value: float
 
+
 class RecordPercentagePrice(BaseModel):
     name: str
     value: float
@@ -86,15 +87,17 @@ class RecordPercentagePrice(BaseModel):
 
 class Usage(BaseModel):
     co2: int
-    idContract:int
-    pricePerUnit:float
-    total:int
+    idContract: int
+    pricePerUnit: float
+    total: int
     records: List[RecordUsage]
 
+
 class ContractPrice(BaseModel):
-    idContract:int
+    idContract: int
     records: List[RecordPercentagePrice]
-    
+
+
 def fetchall(cursor):
     columns = [column[0] for column in cursor.description]
     ret = []
@@ -127,25 +130,28 @@ def get_conn() -> MySQLConnection:
     return conn
 
 
-def get_usage_by_contract(idContract: int,type:str,startTime:datetime,endTime:datetime) -> Usage:
-    if(type=="Gas"):
-        response = requests.get('http://mockapi:443/getUserGas',params={"idContract":idContract,"startTime":startTime,"endTime":endTime})
+def get_usage_by_contract(idContract: int, type: str, startTime: datetime, endTime: datetime) -> Usage:
+    if (type == "Gas"):
+        response = requests.get('http://mockapi:443/getUserGas', params={
+                                "idContract": idContract, "startTime": startTime, "endTime": endTime})
         if response:
             return Usage(**response.json()["gasUsage"])
-    elif(type=="Electricity"):
-        response = requests.get('http://mockapi:443/getUserElectricity',params={"idContract":idContract,"startTime":startTime,"endTime":endTime})
+    elif (type == "Electricity"):
+        response = requests.get('http://mockapi:443/getUserElectricity', params={
+                                "idContract": idContract, "startTime": startTime, "endTime": endTime})
         if response:
             return Usage(**response.json()["electricityUsage"])
     return None
 
+
 def get_projected_price_by_contract(idContract: int) -> ContractPrice:
 
-    response = requests.get('http://mockapi:443/getContractProjectedPrice',params={"idContract":idContract})
+    response = requests.get(
+        'http://mockapi:443/getContractProjectedPrice', params={"idContract": idContract})
     if response:
         print(response.json())
         return ContractPrice(**response.json())
     return None
-
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
@@ -407,6 +413,31 @@ async def get_user_data(user: User, conn: MySQLConnection = Depends(get_conn)):
     return str(cursor.fetchall())
 
 
+@app.post("/getInfoContract")
+async def get_user_data(data: Dict[str, str], conn: MySQLConnection = Depends(get_conn)):
+    idContract = data["idContract"]
+    jwt = data["token"]
+
+    current_user: User = get_current_user(token=jwt)
+    if not current_user:
+        raise HTTPException(status_code=500, detail="User data not found")
+    cursor = conn.cursor()
+    cursor.execute("""
+            SELECT contract_domicile_v.*, permissions.permission 
+            FROM contract_domicile_v
+            JOIN permissions
+            ON permissions.idContract=contract_domicile_v.idContract
+            WHERE permissions.idRegistry = (
+                SELECT id
+                FROM user
+                WHERE user.email=%(email)s
+            )
+            AND contract_domicile_v.idContract=%(idContract)s;
+            """, {"email": current_user.email, "idContract": idContract})
+
+    return fetchone(cursor)
+
+
 @app.post("/getUserDataToken")
 async def get_user_dataT(token: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
     """
@@ -450,9 +481,9 @@ async def get_user_dataT(data: Dict[str, str], conn: MySQLConnection = Depends(g
 
     current_user: User = get_current_user(token=data["token"])
 
-        
     # Get registry data for the user
-    contracts: Usage=get_projected_price_by_contract(idContract=data["idContract"])
+    contracts: Usage = get_projected_price_by_contract(
+        idContract=data["idContract"])
 
     if not contracts:
         raise HTTPException(status_code=500, detail="No data found")
@@ -460,18 +491,21 @@ async def get_user_dataT(data: Dict[str, str], conn: MySQLConnection = Depends(g
     # Return registry data
     return contracts
 
+
 @app.post("/getContractUsage")
 async def get_user_dataT(data: Dict[str, str], conn: MySQLConnection = Depends(get_conn)) -> Registry:
 
     current_user: User = get_current_user(token=data["token"])
-    print(data["token"],data)
+    print(data["token"], data)
     if not data.get("startTime"):
-        data["startTime"]=datetime.datetime.utcnow() - datetime.timedelta(days=31)
+        data["startTime"] = datetime.datetime.utcnow() - \
+            datetime.timedelta(days=31)
     if not data.get("endTime"):
-        data["endTime"]=datetime.datetime.utcnow() 
-        
+        data["endTime"] = datetime.datetime.utcnow()
+
     # Get registry data for the user
-    contracts: Usage=get_usage_by_contract(idContract=data["idContract"],type=data["utility"],startTime= data["startTime"],endTime= data["endTime"])
+    contracts: Usage = get_usage_by_contract(
+        idContract=data["idContract"], type=data["utility"], startTime=data["startTime"], endTime=data["endTime"])
 
     if not contracts:
         raise HTTPException(status_code=500, detail="No data found")

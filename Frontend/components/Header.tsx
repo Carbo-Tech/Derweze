@@ -18,19 +18,16 @@ console.log(session)
       <Navbar.Content />
       <Navbar.Content>
         {session.status=="authenticated" ? (<>
-          <Navbar.Link color="inherit" href="/bills">
+          <Navbar.Link color="inherit" href="/user/bills">
             Bills
           </Navbar.Link>
-          <Navbar.Link color="inherit" href="/contracts">
+          <Navbar.Link color="inherit" href="/user/contracts">
             Contracts
-          </Navbar.Link>
-          <Navbar.Link color="inherit" href="/usage">
-            Usage
           </Navbar.Link></>)
           : (<></>)}
 
 
-        <Navbar.Link color="inherit" href="/home">
+        <Navbar.Link color="inherit" href="/user/dashboard">
           Home
         </Navbar.Link>
 

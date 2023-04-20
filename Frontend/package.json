@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.5.5",
-    "@chakra-ui/react": "^2.5.5",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@marketto/codice-fiscale-utils": "^2.1.1",
@@ -40,6 +39,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
     "react-phone-input-2": "^2.15.1",
+    "react-spinners": "^0.13.8",
     "react-transition-group": "^4.4.5",
     "require": "^2.4.20",
     "sass": "^1.61.0",
@@ -50,7 +50,6 @@
     "@faker-js/faker": "^7.6.0",
     "@types/react": "^18.0.34",
     "@types/react-dom": "^18.0.11",
-    "babel-plugin-styled-components": "^2.1.1",
     "babel-plugin-styled-components": "^2.1.1",
     "devcert": "^1.2.2",
     "styled-components": "^5.3.9"
