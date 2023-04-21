@@ -1,7 +1,8 @@
+import { Spacer } from "@nextui-org/react";
 import "chart.js/auto";
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 
-export default function Chart({ thicknessP, radius, data, text, unit, total }: any) {
+export default function Chart({ thicknessP, radius, data, text, unit, total, co2 }: any) {
     const thickness = {
         id: "thickness",
         beforeDraw: function (chart, options) {
@@ -61,6 +62,7 @@ export default function Chart({ thicknessP, radius, data, text, unit, total }: a
             <Doughnut data={data} options={doughnutOptions} plugins={[thickness, textCenter]} />
             <div style={{ textAlign: "center" }}>
                 <p style={{ textAlign: "center" }}>{total}{unit}</p>
+                <p style={{ textAlign: "center" }}>{`${Math.floor( co2/1000)} co2 Kg=${Math.floor(co2/1833)} trees`}</p>
             </div>
         </div>
     )

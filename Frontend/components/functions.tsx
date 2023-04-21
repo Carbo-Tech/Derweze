@@ -152,8 +152,6 @@ export const contractsCost = (contracts: Array<any>) => {
         });
         return acc;
     }, { records: [] });
-
-
     return merged
 };
 
@@ -185,6 +183,18 @@ export const getContractProjectedPrice = async (jwt: string, idContract: string)
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({ "access_token": jwt, "idContract": idContract })
+    });
+    const data = await response.json();
+    return data;
+};
+
+
+
+export const getContractBills = async (jwt: string, idContract: string, utility:string,date:string) => {
+    const response = await fetch("/api/contracts/getUserBills", {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({ "access_token": jwt, "idContract": idContract , "utility": utility, "date":date})
     });
     const data = await response.json();
     return data;

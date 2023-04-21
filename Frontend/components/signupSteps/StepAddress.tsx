@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import "dayjs/locale/it";
 import "../../components/phoneInput.module.scss";
 
-export default function StepAddress({ formData, setFormData, spacing, clickHandler, }: any) {
+export default function StepAddress({ formData, setFormData, spacing, clickHandler,showText=false }: any) {
     return (
         <>
+        {showText &&
             <Text
                 size={24}
                 weight="bold"
@@ -17,8 +18,9 @@ export default function StepAddress({ formData, setFormData, spacing, clickHandl
                     mb: "20px",
                 }}
             >
+                
                 Derweze address
-            </Text>
+            </Text>}
             <Grid.Container>
                 <Grid xs={6}>
                     <Input

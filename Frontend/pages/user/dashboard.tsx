@@ -27,8 +27,8 @@ export default function Dashboard() {
   const [contracts, setContracts] = useState({});
   const [contractsElectricityCost, setContractsElectricityCost] = useState({ "total": 0, "unit": "KWh", "records": [{ "name": "", "value": 0 }] });
   const [contractsGasCost, setContractsGasCost] = useState({ "total": 0, "unit": "Smc", "records": [{ "name": "", "value": 0 }] });
-  const [contractsTotalGasUsage, setContractsTotalGasUsage] = useState({ total: 0, records: [{ dateTime: "", value: 0 }] });
-  const [contractsTotalElectricityUsage, setContractsTotalElectricityUsage] = useState({ total: 0, records: [{ dateTime: "", value: 0 }] });
+  const [contractsTotalGasUsage, setContractsTotalGasUsage] = useState({ co2:0,total: 0, records: [{ dateTime: "", value: 0 }] });
+  const [contractsTotalElectricityUsage, setContractsTotalElectricityUsage] = useState({co2:0, total: 0, records: [{ dateTime: "", value: 0 }] });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,16 +59,16 @@ export default function Dashboard() {
 
   return (
     <>
-      <Header />
+      <Header activeItemId="/user/dashboard"/>
       <Content>
         <LineSeparator text="Last month data" />
         <Flex direction="row" justifyContent="space-between">
           <Flex direction="column" marginLeft="10%" justifyContent="space-between">
             <Box marginLeft="10%">
-              <Chart data={parseContractsCost(contractsElectricityCost)} total={contractsTotalElectricityUsage.total} unit="KWh" radius={120} thicknessP={20} text="Electricity" />
+              <Chart data={parseContractsCost(contractsElectricityCost)} co2={contractsTotalElectricityUsage.co2} total={contractsTotalElectricityUsage.total} unit="KWh" radius={120} thicknessP={20} text="Electricity" />
 
             </Box>
-            <Spacer y={1}></Spacer>
+            <Spacer y={2}></Spacer>
 
             <Box marginLeft="10%">
               <UsageChart data={parseContractData(contractsTotalElectricityUsage.records, "KWh", 50)} />
@@ -77,10 +77,10 @@ export default function Dashboard() {
           </Flex>
           <Flex direction="column" marginRight="10%" justifyContent="space-between">
             <Box marginRight="10%">
-              <Chart data={parseContractsCost(contractsGasCost)} total={contractsTotalGasUsage.total} unit="SMC" radius={120} thicknessP={20} text="Gas" />
+              <Chart data={parseContractsCost(contractsGasCost)} co2={contractsTotalGasUsage.co2} total={contractsTotalGasUsage.total} unit="SMC" radius={120} thicknessP={20} text="Gas" />
 
             </Box>
-            <Spacer y={1}></Spacer>
+            <Spacer y={2}></Spacer>
 
             <Box marginRight="10%">
               <UsageChart data={parseContractData(contractsTotalGasUsage.records, "M3", 50)} />

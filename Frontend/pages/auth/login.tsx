@@ -98,6 +98,7 @@ export default function Login() {
                     </Text>
                     <form onSubmit={handleSubmit}>
 
+                        <Spacer y={1.7} />
                         <Input
                             aria-label="login-email-input"
                             name="email"
@@ -109,8 +110,9 @@ export default function Login() {
                             color="primary"
                             size="lg"
                             placeholder="Email"
+                            labelPlaceholder="Email"
                         />
-                        <Spacer y={1} />
+                        <Spacer y={1.7} />
                         <Input
                             aria-label="login-password-input"
                             name="password"
@@ -123,6 +125,7 @@ export default function Login() {
                             color="primary"
                             size="lg"
                             placeholder="Password"
+                            labelPlaceholder ="Password"
                         />
                         <Spacer y={1} />
 

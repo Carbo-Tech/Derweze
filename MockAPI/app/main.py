@@ -54,12 +54,12 @@ def get_Records(idContract: int, startTime: datetime, endTime: datetime, medianV
             str(i.timestamp())+str(idContract), medianValue)})  # average m3 natural gas usage per family
     # 1800 average emissions in grams
     co2Val = gaussian_random(str(idContract), medianCo2, standardDeviationCo2)
-    total=sum(record["value"] for record in records)
+    total = sum(record["value"] for record in records)
     return {
         "idContract": idContract,
         "co2": int(total*co2Val),
-        "total":int(total),
-        "pricePerUnit":gaussian_random(str(idContract)+"pricePerUnit",medianPrice,medianPrice/10),
+        "total": int(total),
+        "pricePerUnit": gaussian_random(str(idContract)+"pricePerUnit", medianPrice, medianPrice/10),
         "records": records
     }
 
@@ -115,7 +115,7 @@ def get_plans(address: str) -> List[dict]:
 
 
 @app.get("/getUserElectricity")
-def get_user_electricity(idContract: int, startTime: datetime, endTime: datetime) -> Dict[str, Dict[str, List[Dict[str, int]]]]:
+def get_user_projected_price(idContract: int, startTime: datetime, endTime: datetime) -> Dict[str, Dict[str, List[Dict[str, int]]]]:
     # Here, we would query a database or API to get the electricity usage data for the specified contract and time range
     # For the sake of this example, we will hard-code some sample data
 
@@ -124,22 +124,27 @@ def get_user_electricity(idContract: int, startTime: datetime, endTime: datetime
     return {"electricityUsage": electricity_usage}
 
 ################################################################################################################################
+
+
 @app.get("/getContractProjectedPrice")
-def get_user_electricity(idContract: int) -> List[Dict[str,float]]:
+def get_user_electricity(idContract: int) -> List[Dict[str, float]]:
     # will return percentages of prices (eg {"Commodity":30%,"Taxes":10%})
-    ret:List=[]
-    commodity=gaussian_random(str(idContract)+"commodity",30)
-    delivery=gaussian_random(str(idContract)+"delivery",15)
-    regulatoryCharges=gaussian_random(str(idContract)+"regulatoryCharges",20)
-    otherCharges=gaussian_random(str(idContract)+"otherCharges",14)
-    taxes=gaussian_random(str(idContract)+"taxes",22,0)
-    total = sum([commodity,delivery,regulatoryCharges,otherCharges,taxes])
-    ret.append({"name":"commodity","value":(commodity/total)*100})
-    ret.append({"name":"delivery","value":(delivery/total)*100})
-    ret.append({"name":"regulatoryCharges","value":(regulatoryCharges/total)*100})
-    ret.append({"name":"otherCharges","value":(otherCharges/total)*100})
-    ret.append({"name":"taxes","value":(taxes/total)*100})
-    return {"idContract":idContract,"records":ret}
+    ret: List = []
+    commodity = gaussian_random(str(idContract)+"commodity", 30)
+    delivery = gaussian_random(str(idContract)+"delivery", 15)
+    regulatoryCharges = gaussian_random(
+        str(idContract)+"regulatoryCharges", 20)
+    otherCharges = gaussian_random(str(idContract)+"otherCharges", 14)
+    taxes = gaussian_random(str(idContract)+"taxes", 22, 0)
+    total = sum([commodity, delivery, regulatoryCharges, otherCharges, taxes])
+    ret.append({"name": "commodity", "value": (commodity/total)*100})
+    ret.append({"name": "delivery", "value": (delivery/total)*100})
+    ret.append({"name": "regulatoryCharges",
+               "value": (regulatoryCharges/total)*100})
+    ret.append({"name": "otherCharges", "value": (otherCharges/total)*100})
+    ret.append({"name": "taxes", "value": (taxes/total)*100})
+    return {"idContract": idContract, "records": ret}
+
 
 # Simulated database of user electricity bills
 user_billsE = {
@@ -183,12 +188,14 @@ user_billsE = {
 
 
 @app.get("/getUserElectricityBill")
-def get_user_electricity_bill(idContract: int, date: str) -> Dict[str, Any]:
-    if idContract not in user_billsE:
-        return {"message": "User not found"}
-    if date not in user_billsE[idContract]:
-        return {"message": "Electricity bill not found"}
-    return {"electricityBill": user_billsE[idContract][date]}
+def get_user_electricity_bill(data: Dict[str, str]) -> Dict[str, Any]:
+    date = data["date"]
+    idContract = data["idContract"]
+    return {"date": date,
+        "total": gaussian_random(str(idContract)+"getUserElectricityBill"+date, 130, 30),
+        "paid": gaussian_random(str(idContract)+"getUserElectricityBill"+date, 0.5, 0.5) >= 0.5,
+        "itemized": get_user_projected_price(idContract,datetime.utcnow() - timedelta(days=31),datetime.utcnow())
+    }
 
 ################################################################################################################################
 
@@ -289,11 +296,15 @@ user_billsG = {
 
 @app.get("/getUserGasBill")
 def get_user_gas_bill(idContract: int, date: str) -> Dict[str, Any]:
-    if idContract not in user_billsG:
-        return {"message": "User not found"}
-    if date not in user_billsG[idContract]:
-        return {"message": "Gas bill not found"}
-    return {"gasBill": user_billsG[idContract][date]}
+    return {
+            "date": date,
+            "total": gaussian_random(str(idContract)+"getUserGasBill"+date, 130, 30),
+            "paid": gaussian_random(str(idContract)+"getUserGasBill"+date, 0.5, 0.5) >= 0.5,
+            "itemized": get_user_projected_price(idContract,datetime.utcnow() - \
+            timedelta(days=31),datetime.utcnow())
+        
+    }
+
 
 ################################################################################################################################
 
@@ -335,8 +346,8 @@ user_electricity = {
 }
 
 
-#@app.get("/getUserElectricity")
-#def get_user_electricity(idContract: int, startTime: str, endTime: str) -> Dict[str, Any]:
+# @app.get("/getUserElectricity")
+# def get_user_electricity(idContract: int, startTime: str, endTime: str) -> Dict[str, Any]:
 #    if idContract not in user_electricity:
 #        return {"message": "User not found"}
 #    records = []

@@ -412,9 +412,21 @@ async def get_user_data(user: User, conn: MySQLConnection = Depends(get_conn)):
     cursor.execute(query, (user.email, user.email, user.password))
     return str(cursor.fetchall())
 
+@app.post("/getUserBills")
+async def get_user_bill(data: Dict[str, str], conn: MySQLConnection = Depends(get_conn)):
+    utility=data["utility"]
+    idContract=data["idContract"]
+    if(utility=="EE"):
+        
+        response = requests.get('http://mockapi:443/getUserElectricityBill', params={"idContract": idContract,"date":data["date"] })
+    if(utility=="Gas"):
+        
+        response = requests.get('http://mockapi:443/getUserGasBill', params={"idContract": idContract,"date":data["date"] })
+
+
 
 @app.post("/getInfoContract")
-async def get_user_data(data: Dict[str, str], conn: MySQLConnection = Depends(get_conn)):
+async def get_info_contract(data: Dict[str, str], conn: MySQLConnection = Depends(get_conn)):
     idContract = data["idContract"]
     jwt = data["token"]
 
@@ -534,3 +546,5 @@ async def signup(user: User, registry: Registry, conn: MySQLConnection = Depends
     conn.close()
 
     return {"message": "User registered successfully"}
+
+

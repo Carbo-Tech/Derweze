@@ -1,25 +1,25 @@
 import { Flex, Box, Text } from '@chakra-ui/react';
 import "chart.js/auto";
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
-import Header from '../../components/Header';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer/footer';
-import Chart from '../../components/Charts/chart';
-import Content from '../../components/pageContent';
-import { Spacer } from '@nextui-org/react';
+import Header from '../../../components/Header';
+import Navbar from '../../../components/Navbar';
+import Footer from '../../../components/Footer/footer';
+import Chart from '../../../components/Charts/chart';
+import Content from '../../../components/pageContent';
+import { Button, Spacer } from '@nextui-org/react';
 import { useState, useEffect } from 'react';
-import UsageChart from '../../components/Charts/usageChart';
+import UsageChart from '../../../components/Charts/usageChart';
 import { borderRadius } from '@mui/system';
 import { signOut, useSession } from 'next-auth/react';
-import ContractCharts from '../../components/Charts/ContractChart';
-import LineSeparator from '../../components/lineSeparator';
-import { getContractsUser, singleContractCost } from "../../components/functions"
-import { parseContractData } from "../../components/functions"
-import { parseContractsCost } from "../../components/functions"
-import { getDataContracts } from "../../components/functions"
-import { mergeContracts } from "../../components/functions"
-import { getInfoContract } from '../../components/functions';
-import Contract from '../../components/User/Contract';
+import ContractCharts from '../../../components/Charts/ContractChart';
+import LineSeparator from '../../../components/lineSeparator';
+import { getContractsUser, singleContractCost } from "../../../components/functions"
+import { parseContractData } from "../../../components/functions"
+import { parseContractsCost } from "../../../components/functions"
+import { getDataContracts } from "../../../components/functions"
+import { mergeContracts } from "../../../components/functions"
+import { getInfoContract } from '../../../components/functions';
+import Contract from '../../../components/User/Contract';
 
 import HashLoader from "react-spinners/HashLoader";
 
@@ -74,7 +74,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Header />
+      <Header activeItemId="/user/contracts" />
       <Content>
         {contractsInfoElectricity.sort().map((contract) => {
           if (contract !== undefined && contract.idContract !== 0) {
@@ -84,15 +84,20 @@ export default function Dashboard() {
 
             if (contractCost !== undefined && contractUsage !== undefined) {
               return (
-                <Contract
-                  contractCost={singleContractCost(contractCost)}
-                  contractUsage={contractUsage}
-                  contractData={contract}
-                  unit={"KWh"}
-                  total={contractUsage?.total}
-                  topText={"Electricity"}
+                <>
+                  <Contract
+                    contractCost={singleContractCost(contractCost)}
+                    contractUsage={contractUsage}
+                    contractData={contract}
+                    unit={"KWh"}
+                    total={contractUsage?.total}
+                    topText={"Electricity"}
+                    co2={contractUsage?.co2}
+                    deleteB={contract["permission"] === "E" ? (true) : (false)}
 
-                />
+
+                  />
+                </>
               );
             } else {
               return (
@@ -118,6 +123,7 @@ export default function Dashboard() {
                   unit={"SMC"}
                   total={contractUsage?.total}
                   topText={"Gas"}
+                  deleteB={contract["permission"] === "E" ? (true) : (false)}
                 />
               );
             } else {
@@ -129,6 +135,14 @@ export default function Dashboard() {
             }
           }
         })}
+        <Spacer y={1}> </Spacer>
+        <Flex justifyContent="center" alignItems="center">
+          <Button bordered onPress={() => {
+            if (typeof window !== 'undefined') {
+              window.location.href = "/user/contracts/newContract";
+            }
+          }}>New contract</Button>
+        </Flex>
 
       </Content >
       <Footer />
