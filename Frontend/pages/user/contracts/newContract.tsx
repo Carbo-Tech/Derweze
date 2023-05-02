@@ -57,7 +57,7 @@ export default function Form() {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (typeof window !== "undefined") {
-            window.location.href = "/user/contract/selectContract"
+            window.location.href = "/user/contracts/selectContract"
         }
         // Submit form data to backend API or handle it in some other way
     };

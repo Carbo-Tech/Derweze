@@ -99,7 +99,7 @@ export default function ContractData({ formData, setFormData, spacing, clickHand
 
                         }}
                     >
-                        Cook food?
+                        Cooking?
                     </Checkbox>
 
                 </Grid>
