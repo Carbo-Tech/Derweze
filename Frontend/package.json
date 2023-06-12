@@ -27,7 +27,7 @@
     "dayjs": "^1.11.7",
     "devcert": "^1.2.2",
     "eslint": "8.38.0",
-    "eslint-config-next": "13.3.0",
+    "eslint-config-next": "13.4.5",
     "faker": "^6.6.6",
     "framer-motion": "^10.11.2",
     "md5": "^2.3.0",
